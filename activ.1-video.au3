@@ -79,8 +79,7 @@ For $i = 0 To UBound($aRTT) - 1
 	  WinActivate($hApp)
 
 	  ;resume video
-	  Send("{SPACE}")
-
+	  Send("{SPACE}"
 	  ;sleep for xx sec
 	  Sleep(30000)
 
@@ -102,9 +101,30 @@ WinClose($hWnd)
 ;close the File
 FileClose($hFilehandle)
 
+;close the app
+WinClose($hApp)
 ;============================ Task Description ===================================
 Func TaskDesc()
-   MsgBox($MB_OK,"Task Description"," During this task you will be asked to watch a 5 minutes video about the internet research that is ongoing in Harlem. The video will pause every 30 seconds and a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the quality of the video and audio and not the content of the video.")
+   ;MsgBox($MB_OK,"Task Description"," During this task you will be asked to watch a 5 minutes video about the internet research that is ongoing in Harlem. The video will pause every 30 seconds and a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the quality of the video and audio and not the content of the video.")
+   $taskDesc = "During this task you will be asked to watch a 5 minutes video about the internet research that is ongoing in Harlem. The video will pause every 30 seconds and a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the quality of the video and audio and not the content of the video."
+   $Form1 = GUICreate("Task Description", 971, 442, 237, 118)
+   $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 313)
+   $Button1 = GUICtrlCreateButton("Ok", 424, 384, 147, 33)
+
+   ; setup the font size
+   GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+
+   GUISetState(@SW_SHOW)
+   While 1
+	   $nMsg = GUIGetMsg()
+	   Switch $nMsg
+		 Case $GUI_EVENT_CLOSE
+			ExitLoop
+		 Case $Button1
+			ExitLoop
+	   EndSwitch
+	WEnd
+   GuiDelete($Form1)
 EndFunc
 
 ; ============================QoE Survey GUI====================================
@@ -143,7 +163,7 @@ Func survey()
 		 ExitLoop
 	  EndSelect
    WEnd
-
+   GuiDelete($Form1)
    Return $sQoE
 
 EndFunc
