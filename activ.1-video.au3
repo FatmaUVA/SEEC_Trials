@@ -17,6 +17,8 @@
 #include <FileConstants.au3>
 #include <MsgBoxConstants.au3>
 #include <ButtonConstants.au3>
+#include <FontConstants.au3>
+#include <AutoItConstants.au3>
 
 #RequireAdmin ; this required for clumsy to work properlys
 
@@ -79,7 +81,7 @@ For $i = 0 To UBound($aRTT) - 1
 	  WinActivate($hApp)
 
 	  ;resume video
-	  Send("{SPACE}"
+	  Send("{SPACE}")
 	  ;sleep for xx sec
 	  Sleep(30000)
 
