@@ -66,7 +66,7 @@ $hApp = WinWaitActive($winTitle)
 MsgBox($MB_OK,"Info","Click Play to start the game")
 
 ;sleep for 10 sec
-sleep(30000)
+sleep(10000)
 
 ;ask about experiance
 Local $sQoE = survey()
@@ -88,7 +88,7 @@ For $i = 0 To UBound($aRTT) - 1
 	  WinActivate($hApp)
 
 	  ;sleep for xx sec
-	  Sleep(30000)
+	  Sleep(10000)
 
 	  ;Survey
 	  $sQoE = Survey()
@@ -146,6 +146,7 @@ Func survey()
    GUICtrlCreateGroup("", -99, -99, 1, 1)
    Global $Button1 = GUICtrlCreateButton("Submit", 304, 128, 75, 25)
    GUISetState(@SW_SHOW)
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP);to make the window always on top
 
     ; Loop until the user clicks submit
     While 1

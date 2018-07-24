@@ -141,6 +141,7 @@ Func survey()
    GUICtrlCreateGroup("", -99, -99, 1, 1)
    Global $Button1 = GUICtrlCreateButton("Submit", 304, 128, 75, 25)
    GUISetState(@SW_SHOW)
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP);to make the window always on top
 
     ; Loop until the user clicks submit
     While 1
