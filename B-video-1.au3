@@ -33,7 +33,7 @@ RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
 ; ============================ Parameters initialization ====================
 
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
-Local $vdieoName= "COSMOS.00.mp4"
+Local $vdieoName= "COSMOS00.mp4"
 Local $model = "Model1"
 
 ;============================= Create a file for results======================
@@ -57,8 +57,13 @@ TaskDesc()
 ;================================ Start activity =========================
 ;open the video
 ;ShellExecute("C:\Users\harlem1\Desktop\AUtoIT-scripts\COSMOS.mp4")
-;ShellExecute($videoDir & $vdieoName)
-;Local $hApp = WinWaitActive($vdieoName & " - VLC media player")
+ShellExecute($videoDir & $vdieoName)
+Local $hApp = WinWaitActive($vdieoName & " - VLC media player")
+
+Sleep(70000)
+
+;close the app
+WinClose($hApp)
 
 ; QoE survey
 Local $sQoE = survey()
@@ -70,8 +75,6 @@ FileWrite($hFilehandle, $sQoE & @CRLF)
 ;close the File
 FileClose($hFilehandle)
 
-;close the app
-;WinClose($hApp)
 
 ; Thank you window
 ThankYou()
@@ -176,6 +179,7 @@ Func TaskDesc()
 
    ; setup the font size
    GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+    WinSetOnTop($Form1,"",$WINDOWS_ONTOP);to make the window always on to
 
    GUISetState(@SW_SHOW)
    While 1
