@@ -22,8 +22,9 @@
 #include <AutoItConstants.au3>
 
 ;#pragma compile(AutoItExecuteAllowed, true)
+#RequireAdmin
 
-Local $activity [3] = ["activ.1-video","activ.4-GIMP","activ.3-Game (2)"]
+Local $activity [3] = ["activ.4-GIMP.au3"];["activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game (2).au3"]
 
 ;informed consent pre-survey
 $dir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
@@ -31,14 +32,14 @@ $scriptName = "pre-survey.au3"
 ;RunWait(@AutoItExe & ' /AutoIt3ExecuteScript "C:\Users\harlem1\Desktop\AUtoIT-scripts\pre-survey.au3"')
 ;RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
 
-For $i = 0 To UBound($activity) - 1
+For $i = 0 To 0 ;UBound($activity) - 1
 
    ;start activity
    $scriptName = $activity [$i]
-   ;RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
+   RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
 
    ;Thank you window
-   ;ThankYou()
+   ThankYou()
 
 Next
 
