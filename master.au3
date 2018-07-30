@@ -30,7 +30,7 @@ Local $activity [3] = ["activ.4-GIMP.au3"];["activ.1-video.au3"]; ,"activ.4-GIMP
 $dir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 $scriptName = "pre-survey2.au3"
 ;RunWait(@AutoItExe & ' /AutoIt3ExecuteScript "C:\Users\harlem1\Desktop\AUtoIT-scripts\pre-survey.au3"')
-;RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
+RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
 
 For $i = 0 To 0 ;UBound($activity) - 1
 

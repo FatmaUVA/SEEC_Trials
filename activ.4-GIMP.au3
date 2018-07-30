@@ -63,7 +63,8 @@ $hApp = WinWaitActive($winTitle)
 ;$hApp2 = WinGetHandle($winTitle)
 
 ;show window to start the activity
-MsgBox($MB_OK,"Info","Follow the instructions in the provided sheet to edit the photo")
+;MsgBox($MB_OK,"Info","Follow the instructions in the provided sheet to edit the photo")
+InfoWnd()
 
 ;#comments-start
 ;show done window
@@ -88,7 +89,8 @@ ChangeNetwork($hWnd, $aRTT[1], $aLoss[1])
 ;show window to start second activity
 ;activate GIMP window
 WinActivate($hApp) ; this is not working, not sure why, spent so much time debugging but no luck!
-MsgBox($MB_OK,"Info","Follow the instructions in the provided sheet to edit the photo. When you finish, click on the Done button which will show up in the lower right corner")
+;MsgBox($MB_OK,"Info","Follow the instructions in the provided sheet to edit the photo. When you finish, click on the Done button which will show up in the lower right corner")
+InfoWnd()
 
 ;show done window
 DoneWnd()
@@ -117,7 +119,7 @@ Func TaskDesc()
 
    ;$taskDesc = "During this task you will be asked to edit an image using Adobe Photo Shop by performing two steps:" & @CRLF & "   (i) The first step will be to change the background color on the picture. Prompts will direct you on how to change the background using the tools provided in the table on the right-side of the screen. After finishingthe first step click the “done” button, which is on the right lower corner of the screen. The second step will be to use the smudge tool. First select the smudge tool and the click the mouse and drag the cursor across the screen. Prompts will direct you on how to select and use the smudge tool. In between the two steps a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the responsiveness of the software and the image quality and not the ease or difficulty of the task"
    $taskDesc = "During this task you will be asked to edit an image using GIMP by performing two steps:" & @CRLF & @CRLF & "(i) The first step will be to change the background color on the picture. Prompts will direct you on how to change the background using the tools provided in the table on the right-side of the screen. After finishing the first step click the “done” button, which is on the right lower corner of the screen." &@CRLF & @CRLF & "(ii) The second step will be to use the smudge tool. First select the smudge tool and the click the mouse and drag the cursor across the screen. Prompts will direct you on how to select and use the smudge tool." &@CRLF & @CRLF & "In between the two steps a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the responsiveness of the software and the image quality and not the ease or difficulty of the task."
-   $Form1 = GUICreate("Task Description", 971, 442, 237, 118)
+   $Form1 = GUICreate("Task Description", 971, 442)
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 313)
    $Button1 = GUICtrlCreateButton("Ok", 424, 384, 147, 33)
 
@@ -233,8 +235,7 @@ Func DoneWnd ()
 	   $nMsg = GUIGetMsg()
 	   Switch $nMsg
 		   Case $GUI_EVENT_CLOSE
-			   MsgBox($MB_OK,"Info","Click Done to rate your experience")
-
+			   ExitLoop
 		   Case $Button1
 			  ExitLoop
 	   EndSwitch
@@ -261,3 +262,26 @@ Func DoneWnd1 ()
    WEnd
    GuiDelete($Form1)
 EndFunc
+
+Func InfoWnd ()
+   $Form1 = GUICreate("Info", 500, 164)
+    $Label1 = GUICtrlCreateLabel("﻿Follow the instructions in the provided sheet to edit the photo. When you finish, click on the Done button which will show up in the lower right corner", 8, 16, 470, 81)
+   $Button1 = GUICtrlCreateButton("Ok", 192, 120, 75, 25)
+   ; setup the font size
+   GUICtrlSetFont($Button1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   GUICtrlSetFont($Label1, 15, $FW_NORMAL)
+
+   GUISetState(@SW_SHOW)
+   While 1
+	   $nMsg = GUIGetMsg()
+	   Switch $nMsg
+		   Case $GUI_EVENT_CLOSE
+			   MsgBox($MB_OK,"Info","Click Done to rate your experience")
+
+		   Case $Button1
+			  ExitLoop
+	   EndSwitch
+   WEnd
+   GuiDelete($Form1)
+EndFunc
+
