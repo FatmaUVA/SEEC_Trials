@@ -28,7 +28,7 @@ Local $activity [3] = ["activ.4-GIMP.au3"];["activ.1-video.au3"]; ,"activ.4-GIMP
 
 ;informed consent pre-survey
 $dir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
-$scriptName = "pre-survey.au3"
+$scriptName = "pre-survey2.au3"
 ;RunWait(@AutoItExe & ' /AutoIt3ExecuteScript "C:\Users\harlem1\Desktop\AUtoIT-scripts\pre-survey.au3"')
 ;RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
 
