@@ -26,6 +26,7 @@
 ; QoS
 Local $aRTT[3] = [50,10, 50]
 Local $aLoss[3] = [0.5,0.001,0.1] ;packet loss rate, unit is %
+Local $interval = 40000;time intervalbefore each QoE survey
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 Local $appName= "C:\Users\harlem1\Desktop\Candy Crush Saga.lnk"
 Local $winTitle = "Candy Crush Saga"
@@ -50,23 +51,16 @@ TaskDesc()
 
 ;================================ Start activity =========================
 
-;change network
-;change configuration with clumsy
-;First start clumsy and set basic parameters
-Local $hWnd = OpenClumsy()
-ChangeNetwork($hWnd, $aRTT[0], $aLoss[0])
-
-
 ;open the app
 ShellExecute($appName)
 $hApp = WinWaitActive($winTitle)
 ;$hApp2 = WinGetHandle($winTitle)
-
+Sleep(4000)
 ;show window to start the activity
 MsgBox($MB_OK,"Info","Click Play to start the game")
 
 ;sleep for 10 sec
-sleep(10000)
+sleep($interval)
 
 ;ask about experiance
 Local $sQoE = survey()
@@ -88,7 +82,7 @@ For $i = 0 To UBound($aRTT) - 1
 	  WinActivate($hApp)
 
 	  ;sleep for xx sec
-	  Sleep(10000)
+	  Sleep($interval)
 
 	  ;Survey
 	  $sQoE = Survey()
@@ -114,7 +108,7 @@ WinClose($hApp)
 Func TaskDesc()
 
 $taskDesc = "During this task you play a game called Candy Crush. Swipe the candy to the left to match 3 of the same. Then, swipe this candy down to match 3 of the same. Continue swiping candy to match sets of 3 or more candies. Prompts will direct you on how to swipe the candy. Play this game for up to 5 minutes. During the game, you will be asked to rate your experience from bad (1) to excellent (5). Please rate your experience based on the quality of the image and sound and not the content of the game."
-   $Form1 = GUICreate("Task Description", 971, 442, 237, 118)
+   $Form1 = GUICreate("Task Description", 971, 442);, 237, 118)
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 313)
    $Button1 = GUICtrlCreateButton("Ok", 424, 384, 147, 33)
 

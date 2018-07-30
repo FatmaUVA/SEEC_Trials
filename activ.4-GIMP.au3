@@ -69,6 +69,7 @@ MsgBox($MB_OK,"Info","Follow the instructions in the provided sheet to edit the 
 ;show done window
 DoneWnd()
 
+;#comments-start
 ;QoE survey
 Local $sQoE = survey()
 
@@ -147,7 +148,7 @@ Func survey()
    Global $Group1 = GUICtrlCreateGroup("How do you rate your experience?", 32, 32, 601, 65)
    GUICtrlCreateGroup("", -99, -99, 1, 1)
    Global $Button1 = GUICtrlCreateButton("Submit", 304, 128, 75, 25)
-   GUISetState(@SW_SHOW
+   GUISetState(@SW_SHOW)
    WinSetOnTop($Form1,"",$WINDOWS_ONTOP);to make the window always on top
 
     ; Loop until the user clicks submit
@@ -219,12 +220,13 @@ Func ChangeNetwork($hWnd, $RTT, $loss)
 
 EndFunc
 
-Func DoneWnd1 ()
-   $Form1 = GUICreate("Info", 434, 164, 992, 0)
+Func DoneWnd ()
+   $Form1 = GUICreate("Info", 434, 164, 1450, 770)
    $Label1 = GUICtrlCreateLabel("Click Done ONLY when you finish the photo editing activity ", 8, 16, 420, 81)
    $Button1 = GUICtrlCreateButton("Done", 192, 120, 75, 25)
    ; setup the font size
    GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   GUICtrlSetFont($Button1, 18, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
 
    GUISetState(@SW_SHOW)
    While 1
@@ -240,7 +242,7 @@ Func DoneWnd1 ()
    GuiDelete($Form1)
 EndFunc
 
-Func DoneWnd ()
+Func DoneWnd1 ()
    $Form1 = GUICreate("", 195, 68, 1230, 755)
    $Button1 = GUICtrlCreateButton("Done", 16, 8, 155, 41)
    ; setup the font size
