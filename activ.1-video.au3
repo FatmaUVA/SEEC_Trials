@@ -24,11 +24,12 @@
 
 ; ============================ Parameters initialization ====================
 ; QoS
-Local $aRTT[3] = [5,20] ;, 50]
-Local $aLoss[3] = [0,0.1] ;0.001,0.1] ;packet loss rate, unit is %
+Local $aRTT[3] = [5,20, 50]
+Local $aLoss[3] = [0,0.001,0.1] ;packet loss rate, unit is %
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 ;Local $vdieoName = "Fast Five Stealing The Vault Scene.mp4"
 Local $vdieoName= "COSMOS.mp4"
+Local $timeInterval = 30000 ;in ms
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
@@ -56,7 +57,7 @@ ShellExecute($videoDir & $vdieoName)
 Local $hApp = WinWaitActive($vdieoName & " - VLC media player")
 
 ;sleep for 10 sec
-sleep(30000)
+sleep($timeInterval)
 
 ; pause video
 Send("{SPACE}")
@@ -83,7 +84,7 @@ For $i = 0 To UBound($aRTT) - 1
 	  ;resume video
 	  Send("{SPACE}")
 	  ;sleep for xx sec
-	  Sleep(30000)
+	  Sleep($timeInterval)
 
 	  ;pause video
 	  Send("{SPACE}")
@@ -109,12 +110,13 @@ WinClose($hApp)
 Func TaskDesc()
    ;MsgBox($MB_OK,"Task Description"," During this task you will be asked to watch a 5 minutes video about the internet research that is ongoing in Harlem. The video will pause every 30 seconds and a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the quality of the video and audio and not the content of the video.")
    $taskDesc = "During this task you will be asked to watch a 5 minutes video about the internet research that is ongoing in Harlem. The video will pause every 30 seconds and a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the quality of the video and audio and not the content of the video."
-   $Form1 = GUICreate("Task Description", 971, 442, 237, 118)
+   $Form1 = GUICreate("Task Description", 971, 442)
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 313)
    $Button1 = GUICtrlCreateButton("Ok", 424, 384, 147, 33)
 
    ; setup the font size
-   GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   GUICtrlSetFont($Label1, 20, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   GUICtrlSetFont($Button1, 15, $FW_NORMAL)
 
    GUISetState(@SW_SHOW)
    While 1
