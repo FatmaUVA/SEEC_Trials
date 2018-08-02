@@ -36,6 +36,7 @@ Global $sFileName = @ScriptDir &"\gimp-QoE.txt"
 
 ; Open file
 Global $hFilehandle = FileOpen($sFileName, $FO_APPEND)
+Global $hFilehandle = FileOpen($sFileName, $FO_APPEND)
 
 ; Prove it exists
 If FileExists($sFileName) Then
@@ -63,7 +64,6 @@ $hApp = WinWaitActive($winTitle)
 ;$hApp2 = WinGetHandle($winTitle)
 
 ;show window to start the activity
-;MsgBox($MB_OK,"Info","Follow the instructions in the provided sheet to edit the photo")
 InfoWnd()
 
 ;#comments-start
@@ -143,15 +143,23 @@ EndFunc
 Func survey()
    $Form1 = GUICreate("Quality of Experience Survey", 671, 184, -1, -1)
    Global $Radio1 = GUICtrlCreateRadio("1 (Bad)", 40, 64, 113, 17)
-   Global $Radio2 = GUICtrlCreateRadio("2", 153, 64, 113, 17)
-   Global $Radio3 = GUICtrlCreateRadio("3", 266, 64, 113, 17)
-   Global $Radio4 = GUICtrlCreateRadio("4", 393, 64, 113, 17)
+   Global $Radio2 = GUICtrlCreateRadio("2 (Poor)", 153, 64, 113, 17)
+   Global $Radio3 = GUICtrlCreateRadio("3 (Fair)", 266, 64, 113, 17)
+   Global $Radio4 = GUICtrlCreateRadio("4 (Good)", 393, 64, 113, 17)
    Global $Radio5 = GUICtrlCreateRadio("5 (Excellent)", 535, 64, 113, 17)
    Global $Group1 = GUICtrlCreateGroup("How do you rate your experience?", 32, 32, 601, 65)
    GUICtrlCreateGroup("", -99, -99, 1, 1)
    Global $Button1 = GUICtrlCreateButton("Submit", 304, 128, 75, 25)
    GUISetState(@SW_SHOW)
    WinSetOnTop($Form1,"",$WINDOWS_ONTOP);to make the window always on top
+
+   GUICtrlSetFont($Button1, 11, $FW_NORMAL)
+   GUICtrlSetFont($Group1, 11, $FW_NORMAL)
+   GUICtrlSetFont($Radio1, 11, $FW_NORMAL)
+   GUICtrlSetFont($Radio2, 11, $FW_NORMAL)
+   GUICtrlSetFont($Radio3, 11, $FW_NORMAL)
+   GUICtrlSetFont($Radio4, 11, $FW_NORMAL)
+   GUICtrlSetFont($Radio5, 11, $FW_NORMAL)
 
     ; Loop until the user clicks submit
     While 1
@@ -223,7 +231,7 @@ Func ChangeNetwork($hWnd, $RTT, $loss)
 EndFunc
 
 Func DoneWnd ()
-   $Form1 = GUICreate("Info", 434, 164, 1450, 770)
+   $Form1 = GUICreate("Info", 434, 164,1240,820);1450, 770);high,width,left,top
    $Label1 = GUICtrlCreateLabel("Click Done ONLY when you finish the photo editing activity ", 8, 16, 420, 81)
    $Button1 = GUICtrlCreateButton("Done", 192, 120, 75, 25)
    ; setup the font size
