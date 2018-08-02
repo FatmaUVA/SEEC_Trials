@@ -64,7 +64,7 @@ $hApp = WinWaitActive($winTitle)
 ;$hApp2 = WinGetHandle($winTitle)
 
 ;show window to start the activity
-InfoWnd()
+InfoWnd(1)
 
 ;#comments-start
 ;show done window
@@ -90,7 +90,7 @@ ChangeNetwork($hWnd, $aRTT[1], $aLoss[1])
 ;activate GIMP window
 WinActivate($hApp) ; this is not working, not sure why, spent so much time debugging but no luck!
 ;MsgBox($MB_OK,"Info","Follow the instructions in the provided sheet to edit the photo. When you finish, click on the Done button which will show up in the lower right corner")
-InfoWnd()
+InfoWnd(2)
 
 ;show done window
 DoneWnd()
@@ -252,6 +252,7 @@ Func DoneWnd ()
 EndFunc
 
 Func DoneWnd1 ()
+   ; this is a done window without any text
    $Form1 = GUICreate("", 195, 68, 1230, 755)
    $Button1 = GUICtrlCreateButton("Done", 16, 8, 155, 41)
    ; setup the font size
@@ -271,9 +272,14 @@ Func DoneWnd1 ()
    GuiDelete($Form1)
 EndFunc
 
-Func InfoWnd ()
+Func InfoWnd ($text)
+   If $text == 1 Then
+	  $infoText = "﻿Follow the instructions in the provided sheet to edit the photo. When you finish, click on the Done button which will show up in the lower right corner"
+   Else
+	  $infoText = "﻿Follow the instructions in the second sheet to edit the photo. When you finish, click on the Done button which will show up in the lower right corner"
+   EndIf
    $Form1 = GUICreate("Info", 500, 164)
-    $Label1 = GUICtrlCreateLabel("﻿Follow the instructions in the provided sheet to edit the photo. When you finish, click on the Done button which will show up in the lower right corner", 8, 16, 470, 81)
+    $Label1 = GUICtrlCreateLabel($infoText, 8, 16, 470, 81)
    $Button1 = GUICtrlCreateButton("Ok", 192, 120, 75, 25)
    ; setup the font size
    GUICtrlSetFont($Button1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
