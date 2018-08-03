@@ -17,16 +17,18 @@
 #include <FileConstants.au3>
 #include <MsgBoxConstants.au3>
 #include <ButtonConstants.au3>
+#include <FontConstants.au3>
+#include <AutoItConstants.au3>
 
 #RequireAdmin ; this required for clumsy to work properlys
 
 ; ============================ Parameters initialization ====================
 ; QoS
-Local $aRTT[3] = [5,10, 50]
-Local $aLoss[3] = [0,0.001,0.1] ;packet loss rate, unit is %
+Local $aRTT[3] = [50,10, 50]
+Local $aLoss[3] = [0.5,0.001,0.1] ;packet loss rate, unit is %
+Local $interval = 40000;time intervalbefore each QoE survey
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
-;Local $vdieoName = "Fast Five Stealing The Vault Scene.mp4"
-Local $gameName= "candycrushsaga.exe"
+Local $appName= "C:\Users\harlem1\Desktop\Candy Crush Saga.lnk"
 Local $winTitle = "Candy Crush Saga"
 
 ;============================= Create a file for results======================
@@ -45,22 +47,20 @@ Else
 
 
 ;================================= task description ==========================
-;TaskDesc()
+TaskDesc()
 
 ;================================ Start activity =========================
-;open the video
-;ShellExecute("C:\Users\harlem1\Desktop\AUtoIT-scripts\COSMOS.mp4")
-;ShellExecute($videoDir & $vdieoName)
-;Local $hApp = WinWaitActive("COSMOS.mp4 - VLC media player")
-Run($gameName)
-;ShellExecute("C:\Program Files\WindowsApps\king.com.CandyCrushSaga_1.1280.3.0_x86__kgqvnymyfvs32\candycrushsaga.exe")
-Local $hApp = WinWaitActive($winTitle)
-#comments-start
-;sleep for 10 sec
-sleep(30000)
 
-; pause video
-Send("{SPACE}")
+;open the app
+ShellExecute($appName)
+$hApp = WinWaitActive($winTitle)
+;$hApp2 = WinGetHandle($winTitle)
+Sleep(4000)
+;show window to start the activity
+MsgBox($MB_OK,"Info","Click Play to start the game")
+
+;sleep for 10 sec
+sleep($interval)
 
 ;ask about experiance
 Local $sQoE = survey()
@@ -81,14 +81,8 @@ For $i = 0 To UBound($aRTT) - 1
 	  ;activate app window
 	  WinActivate($hApp)
 
-	  ;resume video
-	  Send("{SPACE}")
-
 	  ;sleep for xx sec
-	  Sleep(30000)
-
-	  ;pause video
-	  Send("{SPACE}")
+	  Sleep($interval)
 
 	  ;Survey
 	  $sQoE = Survey()
@@ -105,9 +99,33 @@ WinClose($hWnd)
 ;close the File
 FileClose($hFilehandle)
 
+;close the app
+WinClose($hApp)
+
+
+
 ;============================ Task Description ===================================
 Func TaskDesc()
-   MsgBox($MB_OK,"Task Description"," During this task you will be asked to watch a 5 minutes video about the internet research that is ongoing in Harlem. The video will pause every 30 seconds and a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the quality of the video and audio and not the content of the video.")
+
+$taskDesc = "During this task you play a game called Candy Crush. Swipe the candy to the left to match 3 of the same. Then, swipe this candy down to match 3 of the same. Continue swiping candy to match sets of 3 or more candies. Prompts will direct you on how to swipe the candy. Play this game for up to 5 minutes. During the game, you will be asked to rate your experience from bad (1) to excellent (5). Please rate your experience based on the quality of the image and sound and not the content of the game."
+   $Form1 = GUICreate("Task Description", 971, 442);, 237, 118)
+   $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 313)
+   $Button1 = GUICtrlCreateButton("Ok", 424, 384, 147, 33)
+
+   ; setup the font size
+   GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+
+   GUISetState(@SW_SHOW)
+   While 1
+	   $nMsg = GUIGetMsg()
+	   Switch $nMsg
+		 Case $GUI_EVENT_CLOSE
+			ExitLoop
+		 Case $Button1
+			ExitLoop
+	   EndSwitch
+	WEnd
+   GuiDelete($Form1)
 EndFunc
 
 ; ============================QoE Survey GUI====================================
@@ -122,6 +140,7 @@ Func survey()
    GUICtrlCreateGroup("", -99, -99, 1, 1)
    Global $Button1 = GUICtrlCreateButton("Submit", 304, 128, 75, 25)
    GUISetState(@SW_SHOW)
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP);to make the window always on top
 
     ; Loop until the user clicks submit
     While 1
@@ -147,6 +166,7 @@ Func survey()
 	  EndSelect
    WEnd
 
+   GuiDelete($Form1)
    Return $sQoE
 
 EndFunc
@@ -178,7 +198,7 @@ Func ChangeNetwork($hWnd, $RTT, $loss)
    WinActivate($hWnd)
 
    ;stop clumsy
-   ControlClick($hWnd, "","Button2", "left", 1,8,8)
+   ;ControlClick($hWnd, "","Button2", "left", 1,8,8)
 
    ;set delay
    ControlSetText($hWnd,"", "Edit2", $RTT)
@@ -190,4 +210,44 @@ Func ChangeNetwork($hWnd, $RTT, $loss)
    ControlClick($hWnd, "","Button2", "left", 1,8,8)
 
 EndFunc
-#comments-end
+
+Func DoneWnd1 ()
+   $Form1 = GUICreate("Info", 434, 164, 992, 0)
+   $Label1 = GUICtrlCreateLabel("Click Done ONLY when you finish the photo editing activity ", 8, 16, 420, 81)
+   $Button1 = GUICtrlCreateButton("Done", 192, 120, 75, 25)
+   ; setup the font size
+   GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+
+   GUISetState(@SW_SHOW)
+   While 1
+	   $nMsg = GUIGetMsg()
+	   Switch $nMsg
+		   Case $GUI_EVENT_CLOSE
+			   MsgBox($MB_OK,"Info","Click Done to rate your experience")
+
+		   Case $Button1
+			  ExitLoop
+	   EndSwitch
+   WEnd
+   GuiDelete($Form1)
+EndFunc
+
+Func DoneWnd ()
+   $Form1 = GUICreate("", 195, 68, 1230, 755)
+   $Button1 = GUICtrlCreateButton("Done", 16, 8, 155, 41)
+   ; setup the font size
+   GUICtrlSetFont($Button1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+
+   GUISetState(@SW_SHOW)
+   While 1
+	   $nMsg = GUIGetMsg()
+	   Switch $nMsg
+		   Case $GUI_EVENT_CLOSE
+			   MsgBox($MB_OK,"Info","Click Done to rate your experience")
+
+		   Case $Button1
+			  ExitLoop
+	   EndSwitch
+   WEnd
+   GuiDelete($Form1)
+EndFunc

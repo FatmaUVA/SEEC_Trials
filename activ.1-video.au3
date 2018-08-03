@@ -29,7 +29,7 @@ Local $aLoss[3] = [0,0.001,0.1] ;packet loss rate, unit is %
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 ;Local $vdieoName = "Fast Five Stealing The Vault Scene.mp4"
 Local $vdieoName= "COSMOS.mp4"
-Local $timeInterval = 30000 ;in ms
+Local $timeInterval = 24000 ;in ms
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
@@ -57,7 +57,7 @@ ShellExecute($videoDir & $vdieoName)
 Local $hApp = WinWaitActive($vdieoName & " - VLC media player")
 
 ;sleep for 10 sec
-sleep($timeInterval)
+sleep($timeInterval+20000)
 
 ; pause video
 Send("{SPACE}")

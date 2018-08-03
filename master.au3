@@ -24,7 +24,7 @@
 ;#pragma compile(AutoItExecuteAllowed, true)
 #RequireAdmin
 
-Local $activity [3] = ["activ.4-GIMP.au3"];["activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game (2).au3"]
+Local $activity [3] = ["activ.4-GIMP.au3"];["activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game.au3"]
 
 ;informed consent pre-survey
 $dir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
