@@ -36,7 +36,7 @@ Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 Local $vdieoName= "COSMOS00.mp4"
 Local $model = "Model1"
 Local $timeInterval = 70000 ;unit ms
-$station = "B1"
+Local $station = "B1"
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
