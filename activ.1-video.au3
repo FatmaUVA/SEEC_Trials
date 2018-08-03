@@ -31,10 +31,11 @@ Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 Local $vdieoName= "COSMOS.mp4"
 Local $timeInterval = 24000 ;in ms
 Local $station = "A1" ;A for protocol A nad B for Protocol B
+Local activity = "video"
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
-Global $sFileName = @ScriptDir &"\video-QoE.txt"
+Global $sFileName = @ScriptDir &"\" & $station &"-"& $activity &"-QoE-results.txt"
 
 ; Open file
 Global $hFilehandle = FileOpen($sFileName, $FO_APPEND)
@@ -48,23 +49,15 @@ Else
 
 ;=========================== Read the user index to write results===================
 ;create a file to hold user index number (asociated with the pre-survey number
-Global $indexFile = @ScriptDir &"\video-" & $station & ".txt"
+Global $indexFile = @ScriptDir &"\" & $station & "-user-index.txt"
 
 ; Open the file for reading and store the handle to a variable.
 Local $hIndexFile = FileOpen($indexFile, $FO_READ)
 
 ; Read the contents of the file using the handle returned by FileOpen.
-Local $userIndex = FileRead($hIndexFile)
+Local $x = FileRead($hIndexFile)
 
 ; Close the handle returned by FileOpen.
-FileClose($hIndexFile)
-;MsgBox($MB_SYSTEMMODAL, "", "Contents of the file:" & @CRLF & $userIndex)
-
-$x=Number($userIndex)+1
-;MsgBox($MB_SYSTEMMODAL, "", "Contents of the file after addition:" & @CRLF & $x)
-;Open file again to write the new index
-Global $hIndexFile = FileOpen($indexFile, $FO_OVERWRITE)
-FileWrite($hIndexFile,$x)
 FileClose($hIndexFile)
 
 
@@ -88,7 +81,7 @@ Send("{SPACE}")
 Local $sQoE = survey()
 
 ;write results to File
-FileWrite($hFilehandle, "0 0 " & $sQoE & @CRLF)
+FileWrite($hFilehandle, $x & " "&"0 0 " & $sQoE & @CRLF)
 
 ;change configuration with clumsy
 ;First start clumsy and set basic parameters
@@ -115,7 +108,7 @@ For $i = 0 To UBound($aRTT) - 1
 	  $sQoE = Survey()
 
 	  ;Write results to the File
-	  FileWrite($hFilehandle, $aRTT[$i] & " " & $aLoss[$j] & " " & $sQoE & @CRLF)
+	  FileWrite($hFilehandle, $x & " "& $aRTT[$i] & " " & $aLoss[$j] & " " & $sQoE & @CRLF)
 
    Next
 Next

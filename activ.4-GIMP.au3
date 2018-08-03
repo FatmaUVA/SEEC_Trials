@@ -30,12 +30,13 @@ Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 Local $appName= "gimp-2.10.exe"
 Local $winTitle = "GNU Image Manipulation Program"
 Local $station = "A1"
+Local $activity = "gimp"
 
 
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
-Global $sFileName = @ScriptDir &"\gimp-QoE.txt"
+Global $sFileName = @ScriptDir &"\" & $station &"-"& $activity &"-QoE-results.txt"
 
 ; Open file
 Global $hFilehandle = FileOpen($sFileName, $FO_APPEND)
@@ -50,23 +51,15 @@ Else
 
 ;=========================== Read the user index to write results===================
 ;create a file to hold user index number (asociated with the pre-survey number
-Global $indexFile = @ScriptDir &"\gimp-" & $station & ".txt"
+Global $indexFile = @ScriptDir &"\" & $station & "-user-index.txt"
 
 ; Open the file for reading and store the handle to a variable.
 Local $hIndexFile = FileOpen($indexFile, $FO_READ)
 
 ; Read the contents of the file using the handle returned by FileOpen.
-Local $userIndex = FileRead($hIndexFile)
+Local $x = FileRead($hIndexFile)
 
 ; Close the handle returned by FileOpen.
-FileClose($hIndexFile)
-;MsgBox($MB_SYSTEMMODAL, "", "Contents of the file:" & @CRLF & $userIndex)
-
-$x=Number($userIndex)+1
-;MsgBox($MB_SYSTEMMODAL, "", "Contents of the file after addition:" & @CRLF & $x)
-;Open file again to write the new index
-Global $hIndexFile = FileOpen($indexFile, $FO_OVERWRITE)
-FileWrite($hIndexFile,$x)
 FileClose($hIndexFile)
 
 
@@ -99,7 +92,7 @@ DoneWnd()
 Local $sQoE = survey()
 
 ;write results
-FileWrite($hFilehandle, $aRTT[0] &" " & $aLoss[0] & " " & $sQoE & @CRLF)
+FileWrite($hFilehandle, $x &" "& $aRTT[0] &" " & $aLoss[0] & " " & $sQoE & @CRLF)
 
 ;stop network emulator
 WinActivate($hWnd)
@@ -124,15 +117,15 @@ DoneWnd()
 Local $sQoE = survey()
 
 ;write results
-FileWrite($hFilehandle, $aRTT[1] &" " & $aLoss[1] & " " & $sQoE & @CRLF)
+FileWrite($hFilehandle, $x &" "& $aRTT[1] &" " & $aLoss[1] & " " & $sQoE & @CRLF)
 
 ;close file and all app
-WinClose($hWnd) ;didn't work, so kill process from ShellExecute
+;WinClose($hWnd) ;didn't work, so kill process from ShellExecute
 RunWait("taskkill /IM gimp-2.10.exe")
 ;discard changes
 Sleep(700)
 Send("^d") ;send CTRL+D to discard changes in GIMP
-WinClose($hApp)
+
 ;close the File
 FileClose($hFilehandle)
 
@@ -149,6 +142,7 @@ Func TaskDesc()
 
    ; setup the font size
    GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
 
    GUISetState(@SW_SHOW)
    While 1

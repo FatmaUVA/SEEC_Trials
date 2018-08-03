@@ -24,13 +24,37 @@
 ;#pragma compile(AutoItExecuteAllowed, true)
 #RequireAdmin
 
+Local $station = "A1"
 Local $activity [3] = ["activ.4-GIMP.au3"];["activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game.au3"]
+
+;=========================== Read the user index to write results===================
+;create a file to hold user index number (asociated with the pre-survey number
+Global $indexFile = @ScriptDir &"\" & $station & "-user-index.txt"
+
+; Open the file for reading and store the handle to a variable.
+Local $hIndexFile = FileOpen($indexFile, $FO_READ)
+
+; Read the contents of the file using the handle returned by FileOpen.
+Local $userIndex = FileRead($hIndexFile)
+
+; Close the handle returned by FileOpen.
+FileClose($hIndexFile)
+;MsgBox($MB_SYSTEMMODAL, "", "Contents of the file:" & @CRLF & $userIndex)
+
+$x=Number($userIndex)+1
+;MsgBox($MB_SYSTEMMODAL, "", "Contents of the file after addition:" & @CRLF & $x)
+;Open file again to write the new index
+Global $hIndexFile = FileOpen($indexFile, $FO_OVERWRITE)
+FileWrite($hIndexFile,$x)
+FileClose($hIndexFile)
+
+;===========start=================
 
 ;informed consent pre-survey
 $dir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 $scriptName = "pre-survey2.au3"
 ;RunWait(@AutoItExe & ' /AutoIt3ExecuteScript "C:\Users\harlem1\Desktop\AUtoIT-scripts\pre-survey.au3"')
-RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
+;RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
 
 For $i = 0 To 0 ;UBound($activity) - 1
 
