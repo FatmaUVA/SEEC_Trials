@@ -24,11 +24,13 @@
 
 ; ============================ Parameters initialization ====================
 ; QoS
-Local $aRTT[3] = [50,10, 50]
-Local $aLoss[3] = [0.5,0.001,0.1] ;packet loss rate, unit is %
+Local $aRTT[3] = [100,100, 50]
+Local $aLoss[3] = [1,2,0.1] ;packet loss rate, unit is %
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 Local $appName= "gimp-2.10.exe"
 Local $winTitle = "GNU Image Manipulation Program"
+
+
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
@@ -44,6 +46,27 @@ If FileExists($sFileName) Then
 Else
     MsgBox($MB_SYSTEMMODAL, "File", "Does not exist")
  EndIf
+
+;=========================== Read the user index to write results===================
+;create a file to hold user index number (asociated with the pre-survey number
+Global $indexFile = @ScriptDir &"\gimp-" & $station & ".txt"
+
+; Open the file for reading and store the handle to a variable.
+Local $hIndexFile = FileOpen($indexFile, $FO_READ)
+
+; Read the contents of the file using the handle returned by FileOpen.
+Local $userIndex = FileRead($hIndexFile)
+
+; Close the handle returned by FileOpen.
+FileClose($hIndexFile)
+;MsgBox($MB_SYSTEMMODAL, "", "Contents of the file:" & @CRLF & $userIndex)
+
+$x=Number($userIndex)+1
+;MsgBox($MB_SYSTEMMODAL, "", "Contents of the file after addition:" & @CRLF & $x)
+;Open file again to write the new index
+Global $hIndexFile = FileOpen($indexFile, $FO_OVERWRITE)
+FileWrite($hIndexFile,$x)
+FileClose($hIndexFile)
 
 
 ;================================= task description ==========================

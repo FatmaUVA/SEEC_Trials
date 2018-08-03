@@ -24,7 +24,7 @@
 
 ; ============================ Parameters initialization ====================
 ; QoS
-Local $aRTT[3] = [50,10, 50]
+Local $aRTT[3] = [10,50, 1000]
 Local $aLoss[3] = [0.5,0.001,0.1] ;packet loss rate, unit is %
 Local $interval = 40000;time intervalbefore each QoE survey
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
@@ -59,8 +59,8 @@ Sleep(4000)
 ;show window to start the activity
 MsgBox($MB_OK,"Info","Click Play to start the game")
 
-;sleep for 10 sec
-sleep($interval)
+;sleep for 55 sec
+sleep(5500)
 
 ;ask about experiance
 Local $sQoE = survey()

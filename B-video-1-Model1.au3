@@ -36,6 +36,7 @@ Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 Local $vdieoName= "COSMOS00.mp4"
 Local $model = "Model1"
 Local $timeInterval = 70000 ;unit ms
+$station = "B1"
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
@@ -51,6 +52,27 @@ Else
     MsgBox($MB_SYSTEMMODAL, "File", "Does not exist")
  EndIf
 
+
+;=========================== Read the user index to write results===================
+;create a file to hold user index number (asociated with the pre-survey number
+Global $indexFile = @ScriptDir &"\video-" & $station & ".txt"
+
+; Open the file for reading and store the handle to a variable.
+Local $hIndexFile = FileOpen($indexFile, $FO_READ)
+
+; Read the contents of the file using the handle returned by FileOpen.
+Local $userIndex = FileRead($hIndexFile)
+
+; Close the handle returned by FileOpen.
+FileClose($hIndexFile)
+;MsgBox($MB_SYSTEMMODAL, "", "Contents of the file:" & @CRLF & $userIndex)
+
+$x=Number($userIndex)+1
+;MsgBox($MB_SYSTEMMODAL, "", "Contents of the file after addition:" & @CRLF & $x)
+;Open file again to write the new index
+Global $hIndexFile = FileOpen($indexFile, $FO_OVERWRITE)
+FileWrite($hIndexFile,$x)
+FileClose($hIndexFile)
 
 ;================================= task description ==========================
 TaskDesc()
