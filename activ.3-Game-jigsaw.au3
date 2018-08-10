@@ -24,13 +24,13 @@
 
 ; ============================ Parameters initialization ====================
 ; QoS
-Local $aRTT[3] = [0,50]
-Local $aLoss[3] = [0,1] ;packet loss rate, unit is %
+Local $aRTT[3] = [0,50,150]
+Local $aLoss[2] = [0,1] ;packet loss rate, unit is %
 Local $interval = 20000;time intervalbefore each QoE survey
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 Local $appName= "C:\Users\harlem1\Desktop\Jigsaw Puzzle Premium.lnk"
 Local $winTitle = "Jigsaw Puzzle Premium"
-Local $station = "A1"
+Local $station = "A3"
 Local $activity = "jigsaw"
 
 ;============================= Create a file for results======================
