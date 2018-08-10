@@ -24,14 +24,14 @@
 
 ; ============================ Parameters initialization ====================
 ; QoS
-Local $aRTT[3] = [5,20, 50]
-Local $aLoss[3] = [0,0.001,0.1] ;packet loss rate, unit is %
+Local $aRTT[3] = [0,50, 150]
+Local $aLoss[3] = [0,0.05,1] ;packet loss rate, unit is %
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 ;Local $vdieoName = "Fast Five Stealing The Vault Scene.mp4"
 Local $vdieoName= "COSMOS.mp4"
 Local $timeInterval = 24000 ;in ms
 Local $station = "A1" ;A for protocol A nad B for Protocol B
-Local activity = "video"
+Local $activity = "video"
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
@@ -63,7 +63,7 @@ FileClose($hIndexFile)
 
 ;================================= task description ==========================
 TaskDesc()
-
+ClumsyWndInfo()
 ;================================ Start activity =========================
 ;open the video
 ;ShellExecute("C:\Users\harlem1\Desktop\AUtoIT-scripts\COSMOS.mp4")
@@ -226,4 +226,35 @@ Func ChangeNetwork($hWnd, $RTT, $loss)
    ;start
    ControlClick($hWnd, "","Button2", "left", 1,8,8)
 
+EndFunc
+
+Func ClumsyWndInfo() ; function to tell people not to touch clumsy window
+
+   $taskDesc = "The window shown below will appear temporarily during the activity. Do not click on any of the buttons."
+   $Form1 = GUICreate("Task Description", 971, 600,-1,-1)
+   $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 100)
+   Local $pic = GUICtrlCreatePic("C:\Users\Harlem1\Desktop\AUtoIT-scripts\clumsy-wnd.jpg",230,100,575,420)
+   $Button1 = GUICtrlCreateButton("Ok", 424, 550, 147, 33)
+0
+
+   ; setup the font size
+   GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
+
+   GUISetState(@SW_SHOW)
+
+   Sleep(3000)
+   GuiDelete($Form1)
+   Return 0
+
+   While 1
+	   $nMsg = GUIGetMsg()
+	   Switch $nMsg
+		 Case $GUI_EVENT_CLOSE
+			ExitLoop
+		 Case $Button1
+			ExitLoop
+	   EndSwitch
+	WEnd
+   GuiDelete($Form1)
 EndFunc

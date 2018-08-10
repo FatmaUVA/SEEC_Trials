@@ -25,12 +25,13 @@
 #RequireAdmin
 
 Local $station = "A1"
-Local $activity [3] = ["activ.4-GIMP.au3"];["activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game.au3"]
+Local $activity [2] = ["activ.1-video.au3" , "activ.3-Game.au3"];["activ.1-video.au3", "activ.3-Game-jigsaw.au3"];, "A-360player.au3"];[ "activ.3-Game-jigsaw.au3","activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game.au3"]
+Local $dir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 
 ;=========================== Read the user index to write results===================
 ;create a file to hold user index number (asociated with the pre-survey number
-Global $indexFile = @ScriptDir &"\" & $station & "-user-index.txt"
-
+;Global $indexFile = @ScriptDir &"\" & $station & "-user-index.txt"
+Global $indexFile = $dir & $station & "-user-index.txt"
 ; Open the file for reading and store the handle to a variable.
 Local $hIndexFile = FileOpen($indexFile, $FO_READ)
 
@@ -51,12 +52,16 @@ FileClose($hIndexFile)
 ;===========start=================
 
 ;informed consent pre-survey
-$dir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
-$scriptName = "pre-survey2.au3"
+;$dir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
+$scriptName = "pre-survey.au3"
 ;RunWait(@AutoItExe & ' /AutoIt3ExecuteScript "C:\Users\harlem1\Desktop\AUtoIT-scripts\pre-survey.au3"')
-;RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
+RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
 
-For $i = 0 To 0 ;UBound($activity) - 1
+;pre-survey
+$scriptName = "pre-survey-questions.au3" ;
+RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
+
+For $i = 0 To UBound($activity) - 1
 
    ;start activity
    $scriptName = $activity [$i]
@@ -73,7 +78,7 @@ Func ThankYou()
 
    $msg = "Would you like to continue with the 2018 Technology Trial, if so please click continue. If not, thank you for volunteering to participate in our study, click Exit to leave"
 
-   $Form1 = GUICreate("Tank You", 886, 288, 288, 177)
+   $Form1 = GUICreate("Thank You", 886, 288, 288, 177)
    $Label1 = GUICtrlCreateLabel($msg, 16, 24, 852, 177)
    $Button1 = GUICtrlCreateButton("Continue", 232, 232, 163, 33)
    $Button2 = GUICtrlCreateButton("Exit", 504, 232, 163, 33)

@@ -24,8 +24,8 @@
 
 ; ============================ Parameters initialization ====================
 ; QoS
-Local $aRTT[3] = [50,10, 50]
-Local $aLoss[3] = [0.5,0.001,0.1] ;packet loss rate, unit is %
+Local $aRTT[3] = [0,50,150]
+Local $aLoss[3] = [0,1] ;packet loss rate, unit is %
 Local $interval = 40000;time intervalbefore each QoE survey
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 Local $appName= "C:\Users\harlem1\Desktop\Candy Crush Saga.lnk"
@@ -64,18 +64,21 @@ FileClose($hIndexFile)
 
 ;================================= task description ==========================
 TaskDesc()
-
+ClumsyWndInfo()
 ;================================ Start activity =========================
 
 ;open the app
 ShellExecute($appName)
 $hApp = WinWaitActive($winTitle)
 ;$hApp2 = WinGetHandle($winTitle)
-Sleep(4000)
+Sleep(5000)
 ;show window to start the activity
 MsgBox($MB_OK,"Info","Click Play to start the game")
 
-;sleep for 10 sec
+Sleep(1000)
+;show window to start the activity
+MsgBox($MB_OK,"Info","Scroll down to start at level 1")
+;sleep for xx sec
 sleep($interval)
 
 ;ask about experiance
@@ -265,5 +268,31 @@ Func DoneWnd ()
 			  ExitLoop
 	   EndSwitch
    WEnd
+   GuiDelete($Form1)
+EndFunc
+
+Func ClumsyWndInfo() ; function to tell people not to touch clumsy window
+
+   $taskDesc = "The window shown below will appear temporarily during the activity. Do not click on any of the buttons."
+   $Form1 = GUICreate("Task Description", 971, 600,-1,-1)
+   $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 100)
+   Local $pic = GUICtrlCreatePic("C:\Users\Harlem1\Desktop\AUtoIT-scripts\clumsy-wnd.jpg",230,100,575,420)
+   $Button1 = GUICtrlCreateButton("Ok", 424, 550, 147, 33)
+0
+
+   ; setup the font size
+   GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
+
+   GUISetState(@SW_SHOW)
+   While 1
+	   $nMsg = GUIGetMsg()
+	   Switch $nMsg
+		 Case $GUI_EVENT_CLOSE
+			ExitLoop
+		 Case $Button1
+			ExitLoop
+	   EndSwitch
+	WEnd
    GuiDelete($Form1)
 EndFunc

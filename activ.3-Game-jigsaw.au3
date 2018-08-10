@@ -24,9 +24,9 @@
 
 ; ============================ Parameters initialization ====================
 ; QoS
-Local $aRTT[3] = [50,10, 50]
-Local $aLoss[3] = [0.5,0.001,0.1] ;packet loss rate, unit is %
-Local $interval = 40000;time intervalbefore each QoE survey
+Local $aRTT[3] = [0,50]
+Local $aLoss[3] = [0,1] ;packet loss rate, unit is %
+Local $interval = 20000;time intervalbefore each QoE survey
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 Local $appName= "C:\Users\harlem1\Desktop\Jigsaw Puzzle Premium.lnk"
 Local $winTitle = "Jigsaw Puzzle Premium"
@@ -63,25 +63,38 @@ FileClose($hIndexFile)
 
 ;================================= task description ==========================
 TaskDesc()
-
+ClumsyWndInfo()
 ;================================ Start activity =========================
 
 ;open the app
 ShellExecute($appName)
 $hApp = WinWaitActive($winTitle)
 ;$hApp2 = WinGetHandle($winTitle)
-Sleep(4000)
+
 ;show window to start the activity
-MsgBox($MB_OK,"Info","Click on Your Free Puzzles to start playing")
+Sleep(1500)
+instruction(1)
+;MsgBox($MB_OK,"Info","Click on Your Free Puzzles to start playing")
+Sleep(2000)
+instruction(2)
+;MsgBox($MB_OK,"Info","Choose a picture")
+Sleep(6000)
+instruction(3)
+;MsgBox($MB_OK,"Info","When you successfully assemble the puzzle, click Quit (on the upper right corner) and choose another puzzle to assemble")
+Sleep(1000)
+instruction(4)
+;MsgBox($MB_OK,"Info","Keep playing! When the test is done, you will be informed by a Thank you window")
+
+
 
 ;sleep for 10 sec
-sleep($interval)
+;sleep($interval)
 
 ;ask about experiance
-Local $sQoE = survey()
+;Local $sQoE = survey()
 
 ;write results to File
-FileWrite($hFilehandle, $x & " "& "0 0 " & $sQoE & @CRLF)
+;FileWrite($hFilehandle, $x & " "& "0 0 " & $sQoE & @CRLF)
 
 ;change configuration with clumsy
 ;First start clumsy and set basic parameters
@@ -122,7 +135,7 @@ WinClose($hApp)
 ;============================ Task Description ===================================
 Func TaskDesc()
 
-$taskDesc = "During this task you will play a game called jigsaw puzzle. Assemble the jigsaw puzzles by dragging and dropping the pieces. Play this game for up to 5 minutes. During the game, you will be asked to rate your experience from bad (1) to excellent (5). Please rate your experience based on the quality of the image and sound and not the content of the game."
+$taskDesc = "During this task you will play a game called jigsaw puzzle. Assemble the jigsaw puzzles by dragging and dropping the pieces. This game lasts for 3 minutes. During the game, you will be asked to rate your experience from bad (1) to excellent (5). Please rate your experience based on the quality of the image and sound and not the content of the game."
    $Form1 = GUICreate("Task Description", 971, 442);, 237, 118)
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 313)
    $Button1 = GUICtrlCreateButton("Ok", 424, 384, 147, 33)
@@ -226,20 +239,31 @@ Func ChangeNetwork($hWnd, $RTT, $loss)
 
 EndFunc
 
-Func DoneWnd1 ()
-   $Form1 = GUICreate("Info", 434, 164, 992, 0)
-   $Label1 = GUICtrlCreateLabel("Click Done ONLY when you finish the photo editing activity ", 8, 16, 420, 81)
-   $Button1 = GUICtrlCreateButton("Done", 192, 120, 75, 25)
+Func instruction ($case)
+   If $case == 1 Then
+	  $text = "Click on Your Free Puzzles to start playing"
+   ElseIf $case == 2 Then
+	  $text = "Choose a picture"
+   ElseIf $case == 3 Then
+	  $text = "When you successfully assemble the puzzle, click Quit (on the upper right corner) and choose another puzzle to assemble"
+   ElseIf $case == 4 Then
+	  $text = "Keep playing! When the test is done, you will be informed by a Thank you window"
+   EndIf
+
+
+   $Form1 = GUICreate("Info", 434, 164)
+   $Label1 = GUICtrlCreateLabel($text, 8, 16, 420, 81)
+   $Button1 = GUICtrlCreateButton("Ok", 192, 120, 75, 25)
    ; setup the font size
    GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
 
    GUISetState(@SW_SHOW)
    While 1
 	   $nMsg = GUIGetMsg()
 	   Switch $nMsg
 		   Case $GUI_EVENT_CLOSE
-			   MsgBox($MB_OK,"Info","Click Done to rate your experience")
-
+			   ExitLoop
 		   Case $Button1
 			  ExitLoop
 	   EndSwitch
@@ -247,22 +271,28 @@ Func DoneWnd1 ()
    GuiDelete($Form1)
 EndFunc
 
-Func DoneWnd ()
-   $Form1 = GUICreate("", 195, 68, 1230, 755)
-   $Button1 = GUICtrlCreateButton("Done", 16, 8, 155, 41)
+Func ClumsyWndInfo() ; function to tell people not to touch clumsy window
+
+   $taskDesc = "The window shown below will appear temporarily during the activity. Do not click on any of the buttons."
+   $Form1 = GUICreate("Task Description", 971, 600,-1,-1)
+   $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 100)
+   Local $pic = GUICtrlCreatePic("C:\Users\Harlem1\Desktop\AUtoIT-scripts\clumsy-wnd.jpg",230,100,575,420)
+   $Button1 = GUICtrlCreateButton("Ok", 424, 550, 147, 33)
+0
+
    ; setup the font size
-   GUICtrlSetFont($Button1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
 
    GUISetState(@SW_SHOW)
    While 1
 	   $nMsg = GUIGetMsg()
 	   Switch $nMsg
-		   Case $GUI_EVENT_CLOSE
-			   MsgBox($MB_OK,"Info","Click Done to rate your experience")
-
-		   Case $Button1
-			  ExitLoop
+		 Case $GUI_EVENT_CLOSE
+			ExitLoop
+		 Case $Button1
+			ExitLoop
 	   EndSwitch
-   WEnd
+	WEnd
    GuiDelete($Form1)
 EndFunc

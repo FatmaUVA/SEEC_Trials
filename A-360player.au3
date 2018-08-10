@@ -24,14 +24,14 @@
 
 ; ============================ Parameters initialization ====================
 ; QoS
-Local $aRTT[3] = [100,100, 50]
-Local $aLoss[3] = [1,2,0.1] ;packet loss rate, unit is %
+Local $aRTT[3] = [0,50]
+Local $aLoss[3] = [0,1] ;packet loss rate, unit is %
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 Local $appName  = "C:\Program Files (x86)\Insta360 Player\Insta360Player.exe"
 Local $winTitle = "Insta360Player"
 Local $station = "A1"
 Local $activity = "360player"
-Local $interval = 10000;time interval before each QoE survey
+Local $interval = 7000;time interval before each QoE survey
 
 
 
@@ -66,6 +66,7 @@ FileClose($hIndexFile)
 
 ;================================= task description ==========================
 TaskDesc()
+ClumsyWndInfo()
 
 ;================================ Start activity =========================
 
@@ -86,7 +87,7 @@ InfoWnd(1)
 
 InfoWnd(2)
 ;sleep for xx sec
-sleep($interval)
+;sleep($interval)
 
 ;ask about experiance
 Local $sQoE = survey()
@@ -109,9 +110,8 @@ For $i = 0 To UBound($aRTT) - 1
 
 	  InfoWnd(3)
 
-	   InfoWnd(2)
 	  ;sleep for xx sec
-	  Sleep($interval)
+	  ;Sleep($interval)
 	  InfoWnd(2)
 
 	  ;Survey
@@ -139,9 +139,36 @@ FileClose($hFilehandle)
 Func TaskDesc()
 
    $taskDesc = "During this task you will explore six 360-degree photos. Click and drag to move around the photo. Prompts will direct you on how to change photos. In between each photo a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the responsiveness of the software and the image quality and not the content of the image"
-   $Form1 = GUICreate("Task Description", 971, 442)
+   $Form1 = GUICreate("Task Description", 971, 442,-1,-1)
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 313)
    $Button1 = GUICtrlCreateButton("Ok", 424, 384, 147, 33)
+
+
+   ; setup the font size
+   GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
+
+   GUISetState(@SW_SHOW)
+   While 1
+	   $nMsg = GUIGetMsg()
+	   Switch $nMsg
+		 Case $GUI_EVENT_CLOSE
+			ExitLoop
+		 Case $Button1
+			ExitLoop
+	   EndSwitch
+	WEnd
+   GuiDelete($Form1)
+EndFunc
+
+Func ClumsyWndInfo() ; function to tell people not to touch clumsy window
+
+   $taskDesc = "The window shown below will appear temporarily during the activity. Do not click on any of the buttons."
+   $Form1 = GUICreate("Task Description", 971, 600,-1,-1)
+   $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 100)
+   Local $pic = GUICtrlCreatePic("C:\Users\Harlem1\Desktop\AUtoIT-scripts\clumsy-wnd.jpg",230,100,575,420)
+   $Button1 = GUICtrlCreateButton("Ok", 424, 550, 147, 33)
+0
 
    ; setup the font size
    GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
@@ -251,13 +278,14 @@ Func ChangeNetwork($hWnd, $RTT, $loss)
 
 EndFunc
 
-Func DoneWnd ()
-   $Form1 = GUICreate("Info", 434, 164,1240,820);1450, 770);high,width,left,top
-   $Label1 = GUICtrlCreateLabel("Click Done ONLY when you finish the photo editing activity ", 8, 16, 420, 81)
-   $Button1 = GUICtrlCreateButton("Done", 192, 120, 75, 25)
+Func DoneWnd ($Form2)
+   $Form1 = GUICreate("Info", 250, 100,1100,500);1450, 770);high,width,left,top
+   $Label1 = GUICtrlCreateLabel("Click OK when done ", 8, 16, 200, 50)
+   $Button1 = GUICtrlCreateButton("OK", 100,60, 75, 25)
    ; setup the font size
    GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
    GUICtrlSetFont($Button1, 18, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
 
    GUISetState(@SW_SHOW)
    While 1
@@ -270,46 +298,60 @@ Func DoneWnd ()
 	   EndSwitch
    WEnd
    GuiDelete($Form1)
+   GuiDelete($Form2)
 EndFunc
 
-Func DoneWnd1 ()
-   ; this is a done window without any text
-   $Form1 = GUICreate("", 195, 68, 1230, 755)
-   $Button1 = GUICtrlCreateButton("Done", 16, 8, 155, 41)
+Func arrowWnd($Form2)
+  $Form1 = GUICreate("Info", 250, 300,5,350);1450, 770);width,height,left,top
+   $Label1 = GUICtrlCreateLabel("Click OK when done ", 8, 8, 210, 50) ;left,top,width,height
+   Local $pic = GUICtrlCreatePic("C:\Users\Harlem1\Desktop\AUtoIT-scripts\arrow.jpg",90,80,100,50);left,top,width,height
+   $Button1 = GUICtrlCreateButton("OK", 100,230, 75, 25)
    ; setup the font size
-   GUICtrlSetFont($Button1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   GUICtrlSetFont($Button1, 18, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
 
    GUISetState(@SW_SHOW)
    While 1
 	   $nMsg = GUIGetMsg()
 	   Switch $nMsg
 		   Case $GUI_EVENT_CLOSE
-			   MsgBox($MB_OK,"Info","Click Done to rate your experience")
-
+			   ExitLoop
 		   Case $Button1
 			  ExitLoop
 	   EndSwitch
    WEnd
    GuiDelete($Form1)
+   GuiDelete($Form2)
 EndFunc
 
 Func InfoWnd ($text)
    If $text == 1 Then
-	  $infoText = "To open the first imgage click on: File -> Open -> Pictures (from the leftside bar) -> 3601." & @CRLF &"Click (Ok) when done."
+	  $infoText = "To open the first image click on: File -> Open -> Pictures (from the leftside bar) -> 3601."
    ElseIf $text == 2 Then
-	  $infoText = "You have 15 sec to explore the photo, Zoom-in and out or click and drag to move around the photo. Click (Ok) to start."
+	  $infoText = "Zoom-in and out by rolling the mouse ball and click and drag to explore the photo"
    Else
-	  $infoText = "Move the cursor to the middle of the left side of the image, an arrow will appear, click on it to move to the next photo." & @CRLF & "Click (Ok) when done."
+	  $infoText = "Move the cursor to the middle of the left side of the image, an arrow will appear, click on it to move to the next photo."
    EndIf
 
-   $Form1 = GUICreate("Info", 850, 164,500,10)
+   $Form1 = GUICreate("Info", 850, 100,300,10)
    $Label1 = GUICtrlCreateLabel($infoText, 8, 16, 845, 81)
-   $Button1 = GUICtrlCreateButton("Ok", 370, 120, 75, 25)
+   ;$Button1 = GUICtrlCreateButton("Ok", 370, 120, 75, 25)
 
    ; setup the font size
-   GUICtrlSetFont($Button1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   ;GUICtrlSetFont($Button1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
    GUICtrlSetFont($Label1, 15, $FW_NORMAL)
    WinSetOnTop($Form1,"",$WINDOWS_ONTOP);to make the window always on top
+
+   GUISetState(@SW_SHOW)
+   If  $text == 1 or $text == 2 Then
+	  Sleep($interval)
+	  DoneWnd ($Form1)
+   Else
+	  arrowWnd($Form1)
+   EndIf
+
+   #comments-start
 
    GUISetState(@SW_SHOW)
    While 1
@@ -322,5 +364,7 @@ Func InfoWnd ($text)
 	   EndSwitch
    WEnd
    GuiDelete($Form1)
+   #comments-end
 EndFunc
+
 

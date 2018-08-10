@@ -41,7 +41,7 @@ While 1
 		 Exit
 	  Case $Button1
 		 GUIDelete($Form1)
-		 openSurvey()
+		 ;openSurvey()
 		 Exit
 	EndSwitch
  WEnd
