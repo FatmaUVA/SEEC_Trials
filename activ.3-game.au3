@@ -24,13 +24,13 @@
 
 ; ============================ Parameters initialization ====================
 ; QoS
-Local $aRTT[3] = [0,50,150]
-Local $aLoss[3] = [0,1] ;packet loss rate, unit is %
-Local $interval = 40000;time intervalbefore each QoE survey
+Local $aRTT[2] = [0,50]
+Local $aLoss[2] = [0,1] ;packet loss rate, unit is %
+Local $interval = 30000;time intervalbefore each QoE survey
 Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 Local $appName= "C:\Users\harlem1\Desktop\Candy Crush Saga.lnk"
 Local $winTitle = "Candy Crush Saga"
-Local $station = "A1"
+Local $station = "A3"
 Local $activity = "candyCrush"
 
 ;============================= Create a file for results======================
@@ -78,14 +78,15 @@ MsgBox($MB_OK,"Info","Click Play to start the game")
 Sleep(1000)
 ;show window to start the activity
 MsgBox($MB_OK,"Info","Scroll down to start at level 1")
+Sleep(3000)
 ;sleep for xx sec
-sleep($interval)
+;sleep($interval)
 
 ;ask about experiance
-Local $sQoE = survey()
+;Local $sQoE = survey()
 
 ;write results to File
-FileWrite($hFilehandle, $x & " "& "0 0 " & $sQoE & @CRLF)
+;FileWrite($hFilehandle, $x & " "& "0 0 " & $sQoE & @CRLF)
 
 ;change configuration with clumsy
 ;First start clumsy and set basic parameters
