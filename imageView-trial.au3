@@ -27,7 +27,7 @@ Opt("WinTitleMatchMode",-2) ;1=start, 2=subStr, 3=exact, 4=advanced, -1 to -4=No
 ; ============================ Parameters initialization ====================
 ; QoS
 Local $aRTT[1] = [0]
-Local $aLoss[2] = [0,5] ;packet loss rate, unit is %
+Local $aLoss[3] = [0,3,5] ;packet loss rate, unit is %
 ;Local $appName  = "C:\Program Files (x86)\Insta360 Player\Insta360Player.exe"
 ;Local $winTitle = "Insta360Player"
 Local $station = "A1"
@@ -35,9 +35,11 @@ Local $activity = "ImageView"
 Local $interval = 3000;time interval before each QoE survey
 
 
-Local $logDir = "C:\Users\Harlem5\SEEC\Windows-scripts"
-local $picsDir = $logDir & "\Pics6\"
-local $picDirName = "Pics6"
+Local $logDir = "C:\Users\Harlem5\Desktop\AUtoIT-scripts\SEEC_Trials\"
+local $picsDir1 = $logDir & "pics1\" ;this dir for small images with small no of unique pixels
+local $picDirName1 = "pics1"
+local $picsDir2 = $logDir & "pics2\" ;this dir for larger images with larger no of unique pixels
+local $picDirName2 = "pics2"
 local $picsExt = ".jpg"
 Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
 
@@ -45,14 +47,21 @@ Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
-Global $sFileName = @ScriptDir &"\" & $station &"-"& $activity &"-QoE-results.txt"
+Global $sFileName1 = @ScriptDir &"\" & $station &"-"& $activity  & "-" & $picDirName1 &"-QoE-results.txt"
+Global $sFileName2 = @ScriptDir &"\" & $station &"-"& $activity  & "-" & $picDirName2 &"-QoE-results.txt"
 
 ; Open file
-Global $hFilehandle = FileOpen($sFileName, $FO_APPEND)
-Global $hFilehandle = FileOpen($sFileName, $FO_APPEND)
+Global $hFilehandle1 = FileOpen($sFileName1, $FO_APPEND)
+Global $hFilehandle2 = FileOpen($sFileName2, $FO_APPEND)
 
 ; Prove it exists
-If FileExists($sFileName) Then
+If FileExists($sFileName1) Then
+   ; MsgBox($MB_SYSTEMMODAL, "File", "Exists")
+Else
+    MsgBox($MB_SYSTEMMODAL, "File", "Does not exist")
+ EndIf
+
+ If FileExists($sFileName2) Then
    ; MsgBox($MB_SYSTEMMODAL, "File", "Exists")
 Else
     MsgBox($MB_SYSTEMMODAL, "File", "Does not exist")
@@ -82,15 +91,21 @@ ClumsyWndInfo()
 ;First start clumsy and set basic parameters
 Local $hClumsy = Clumsy("", "open")
 
-
+;open the app (directory where the images are)
+ShellExecute($picsDir1, "", @SW_MAXIMIZE)
+$hApp1 = WinWaitActive($picDirName1)
+;maximizing the window is not working, so I'm doing it manually
+WinMove($hApp1,"",0,0,@DesktopWidth, @DesktopHeight)
 
 ;open the app (directory where the images are)
-ShellExecute($picsDir)
-$hApp = WinWaitActive($picDirName)
+ShellExecute($picsDir2, "", @SW_MAXIMIZE)
+$hApp2 = WinWaitActive($picDirName2)
+;maximizing the window is not working, so I'm doing it manually
+WinMove($hApp2,"",0,0,@DesktopWidth, @DesktopHeight)
 
 
 For $i = 0 To UBound($aRTT) - 1
-   For $j = 0 To UBound($aLoss) - 1
+   For $j = 0 To 0 ; UBound($aLoss) - 1
 
 	  ;start clumsy
 	  Clumsy($hClumsy, "configure",$aRTT[$i], $aloss[$j])
@@ -99,20 +114,30 @@ For $i = 0 To UBound($aRTT) - 1
 	  ;ChangeNetwork($hWnd, $aRTT[$i], $aloss[$j])
 
 	  ;activate app window
-	  WinActivate($hApp)
+	  WinActivate($hApp1)
 
 	  InfoWnd(1)
-
-	  MouseClick("left") ; to activate the image window
-	  ;sleep for xx sec
-	  ;Sleep($interval)
-	  ;InfoWnd(2)
 
 	  ;Survey
 	  $sQoE = Survey()
 
 	  ;Write results to the File
-	  FileWrite($hFilehandle,  $x & " "& $aRTT[$i] & " " & $aLoss[$j] & " " & $sQoE & @CRLF)
+	  FileWrite($hFilehandle1,  $x & " "& $aRTT[$i] & " " & $aLoss[$j] & " " & $sQoE & @CRLF)
+	  WinClose("Photos")
+
+	  ; larger image
+	  ;activate app window
+	  WinActivate($hApp2)
+
+	  InfoWnd(1)
+
+	  MouseClick("left") ; to activate the image window
+
+	  ;Survey
+	  $sQoE = Survey()
+
+	  ;Write results to the File TODO fix the write result file to differenciate between images
+	  FileWrite($hFilehandle2,  $x & " "& $aRTT[$i] & " " & $aLoss[$j] & " " & $sQoE & @CRLF)
 	  WinClose("Photos")
 
 	  ;stop clumsy
@@ -126,7 +151,8 @@ Next
 WinClose($hClumsy)
 
 ;close the app (the directory)
-WinClose($hApp)
+WinClose($hApp1)
+WinClose($hApp2)
 ;close the File
 FileClose($hFilehandle)
 
@@ -134,7 +160,7 @@ FileClose($hFilehandle)
 ;============================ Task Description ===================================
 Func TaskDesc()
 
-   $taskDesc = "During this task you will explore six 360-degree photos. Click and drag to move around the photo. Prompts will direct you on how to change photos. In between each photo a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the responsiveness of the software and the image quality and not the content of the image"
+   $taskDesc = "During this task you will be asked to look at different images. After each set of images you will be asked to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the responsiveness of the software and the image quality and not the content of the image"
    $Form1 = GUICreate("Task Description", 971, 442,-1,-1)
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 313)
    $Button1 = GUICtrlCreateButton("Ok", 424, 384, 147, 33)
@@ -162,7 +188,7 @@ Func ClumsyWndInfo() ; function to tell people not to touch clumsy window
    $taskDesc = "The window shown below will appear temporarily during the activity. Do not click on any of the buttons."
    $Form1 = GUICreate("Task Description", 971, 600,-1,-1)
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 100)
-   Local $pic = GUICtrlCreatePic( @ScriptDir & "clumsy-wnd.jpg",230,100,575,420)
+   Local $pic = GUICtrlCreatePic( @ScriptDir & "\clumsy-wnd.jpg",230,100,575,420)
    $Button1 = GUICtrlCreateButton("Ok", 424, 550, 147, 33)
 0
 
@@ -234,7 +260,6 @@ Func survey()
 
 EndFunc
 
-
 Func Clumsy($hWnd, $cmd, $RTT=0, $loss=0)
 
    If $cmd = "open" Then
@@ -274,9 +299,9 @@ Func Clumsy($hWnd, $cmd, $RTT=0, $loss=0)
    EndIf
 EndFunc
 
-Func DoneWnd ($Form2)
+Func DoneWnd ()
    $Form1 = GUICreate("Rate", 230, 69, 1449, 908);width [, height [, left = -1 [, top = -1 222
-   $Button1 = GUICtrlCreateButton("Rate your Experiance", 8, 16, 220, 41) ; left, top [, width [, height
+   $Button1 = GUICtrlCreateButton("Rate your Experience", 8, 16, 220, 41) ; left, top [, width [, height
    ; $Label1 = GUICtrlCreateLabel("", 8, 16, 200, 50)
 
    ; setup the font size
@@ -295,7 +320,7 @@ Func DoneWnd ($Form2)
 	   EndSwitch
    WEnd
    GuiDelete($Form1)
-   GuiDelete($Form2)
+
 EndFunc
 
 Func arrowWnd($Form2)
@@ -324,31 +349,22 @@ EndFunc
 
 Func InfoWnd ($text)
    If $text == 1 Then
-	  $infoText = "Click on the first image (1.jpg). Use the keyboard right arrow to navigate between images. When you reach the last imgae, click on the right down corner button which will appear in few seconds (rate your experiance)"
+	  $infoText = "Click on the first image (1.jpg). Use the keyboard right arrow to navigate between images. When you reach the last imgae (when clicking on the right arrow in the keyboard the image will not change), click on the right down corner button (Rate your experience) which will appear in few seconds. Click ok to start"
    ElseIf $text == 2 Then
 	  $infoText = "Zoom-in and out by rolling the mouse ball and click and drag to explore the photo"
    Else
 	  $infoText = "Move the cursor to the middle of the left side of the image, an arrow will appear, click on it to move to the next photo."
    EndIf
 
-   $Form1 = GUICreate("Info",1044, 205, 351, 2) ;width [, height [, left = -1 [, top = -1 222
-   $Label1 = GUICtrlCreateLabel($infoText, 24, 16, 1012, 129)
-   ;$Button1 = GUICtrlCreateButton("Button1", 496, 168, 75, 25)
+   $Form1 = GUICreate("Info",1044, 140, 351, 2) ;width [, height [, left = -1 [, top = -1 222
+   $Label1 = GUICtrlCreateLabel($infoText, 24, 16, 1012, 70)
+   $Button1 = GUICtrlCreateButton("Ok", 496, 95, 75, 25)
 
    ; setup the font size
    ;GUICtrlSetFont($Button1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
    GUICtrlSetFont($Label1, 15, $FW_NORMAL)
    WinSetOnTop($Form1,"",$WINDOWS_ONTOP);to make the window always on top
 
-   GUISetState(@SW_SHOW)
-   If  $text == 1 or $text == 2 Then
-	  ;Sleep($interval)
-	  DoneWnd ($Form1)
-   Else
-	  arrowWnd($Form1)
-   EndIf
-
-   #comments-start
 
    GUISetState(@SW_SHOW)
    While 1
@@ -356,12 +372,18 @@ Func InfoWnd ($text)
 	   Switch $nMsg
 		   Case $GUI_EVENT_CLOSE
 			   MsgBox($MB_OK,"Info","Click Ok")
-		   Case $Button1
+			Case $Button1
+			  GuiDelete($Form1)
 			  ExitLoop
 	   EndSwitch
-   WEnd
-   GuiDelete($Form1)
-   #comments-end
+	WEnd
+
+	If  $text == 1 or $text == 2 Then
+	  DoneWnd ()
+   Else
+	  arrowWnd($Form1)
+   EndIf
+
 EndFunc
 
 
