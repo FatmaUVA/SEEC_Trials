@@ -21,19 +21,20 @@
 #include <AutoItConstants.au3>
 
 #RequireAdmin ; this required for clumsy to work properlys
+Opt("WinTitleMatchMode",-2) ;1=start, 2=subStr, 3=exact, 4=advanced, -1 to -4=Nocase ;used for WInWaitActive title matching
 
 ; ============================ Parameters initialization ====================
 ; QoS
-Local $aRTT[3] = [0,50]
-Local $aLoss[3] = [0,1] ;packet loss rate, unit is %
-Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
+Local $aRTT[1] = [0]
+Local $aLoss[3] = [0,3,5] ;packet loss rate, unit is %
+Local $videoDir = "C:\Users\harlem5\Desktop\AUtoIT-scripts\"
 Local $appName  = "C:\Program Files (x86)\Insta360 Player\Insta360Player.exe"
 Local $winTitle = "Insta360Player"
 Local $station = "A1"
 Local $activity = "360player"
-Local $interval = 7000;time interval before each QoE survey
+Local $interval = 15000;time interval before each QoE survey
 
-
+Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
@@ -73,46 +74,37 @@ ClumsyWndInfo()
 ;change network
 ;change configuration with clumsy
 ;First start clumsy and set basic parameters
-Local $hWnd = OpenClumsy()
-ChangeNetwork($hWnd, $aRTT[0], $aLoss[0])
+Local $hClumsy = Clumsy("", "open")
 
 
 ;open the app
 ShellExecute($appName)
 $hApp = WinWaitActive($winTitle)
+;maximizing the window is not working, so I'm doing it manually
+WinMove($hApp,"",0,0,@DesktopWidth, @DesktopHeight)
 
 
-;show window to start the activity
-InfoWnd(1)
 
-InfoWnd(2)
-;sleep for xx sec
-;sleep($interval)
-
-;ask about experiance
-Local $sQoE = survey()
-
-;write results to File
-FileWrite($hFilehandle, $x & " "& "0 0 " & $sQoE & @CRLF)
-
-;change configuration with clumsy
-;First start clumsy and set basic parameters
-;Local $hWnd = OpenClumsy()
+$imgNo=1
 
 For $i = 0 To UBound($aRTT) - 1
    For $j = 0 To UBound($aLoss) - 1
 
-	  ;start clumsy
-	  ChangeNetwork($hWnd, $aRTT[$i], $aloss[$j])
+	 ;start clumsy
+	  Clumsy($hClumsy, "configure",$aRTT[$i], $aloss[$j])
+	  Clumsy($hClumsy, "start")
+	  WinSetState($hClumsy, "", @SW_MINIMIZE)
 
 	  ;activate app window
 	  WinActivate($hApp)
 
-	  InfoWnd(3)
+	  ;show window to start the activity
+	  InfoWnd(1,$imgNo)
+
+	  InfoWnd(2)
 
 	  ;sleep for xx sec
-	  ;Sleep($interval)
-	  InfoWnd(2)
+	  Sleep($interval)
 
 	  ;Survey
 	  $sQoE = Survey()
@@ -120,21 +112,27 @@ For $i = 0 To UBound($aRTT) - 1
 	  ;Write results to the File
 	  FileWrite($hFilehandle,  $x & " "& $aRTT[$i] & " " & $aLoss[$j] & " " & $sQoE & @CRLF)
 
+
+	  ;stop clumsy
+	  Clumsy($hClumsy, "stop")
+
+	  $imgNo = $imgNo + 1
+
    Next
 Next
 
 
 ;close file and all app
-;WinClose($hWnd) ;didn't work, so kill process from ShellExecute
-RunWait("taskkill /IM Insta360Player.exe")
+WinClose($hApp)
+
 
 ;stop network emulator
-WinClose($hWnd)
+WinClose($hClumsy)
 
 ;close the File
 FileClose($hFilehandle)
 
-#comments-end
+
 ;============================ Task Description ===================================
 Func TaskDesc()
 
@@ -166,7 +164,7 @@ Func ClumsyWndInfo() ; function to tell people not to touch clumsy window
    $taskDesc = "The window shown below will appear temporarily during the activity. Do not click on any of the buttons."
    $Form1 = GUICreate("Task Description", 971, 600,-1,-1)
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 100)
-   Local $pic = GUICtrlCreatePic("C:\Users\Harlem1\Desktop\AUtoIT-scripts\clumsy-wnd.jpg",230,100,575,420)
+   Local $pic = GUICtrlCreatePic(@ScriptDir & "\clumsy-wnd.jpg",230,100,575,420)
    $Button1 = GUICtrlCreateButton("Ok", 424, 550, 147, 33)
 0
 
@@ -238,44 +236,43 @@ Func survey()
 
 EndFunc
 
-Func WriteToFile($sQoE)
-; Append a line
-FileWrite($hFilehandle, @CRLF & $sQoE)
-EndFunc
+Func Clumsy($hWnd, $cmd, $RTT=0, $loss=0)
 
-Func OpenClumsy()
-   ShellExecute("C:\Users\harlem1\Downloads\clumsy-0.2-win64\clumsy.exe")
-   Local $hWnd = WinWaitActive("clumsy 0.2")
-   ;basic setup
-   ; clear the filter text filed
-   ControlSetText($hWnd,"", "Edit1", "outbound")
+   If $cmd = "open" Then
+	  ShellExecute($clumsyDir & "clumsy-0.2-win64\clumsy.exe")
+	  $hWnd = WinWaitActive("clumsy 0.2")
+	  ;basic setup
+	  ; clear the filter text filed
+	  ;Local $filter = "outbound and ip.DstAddr==" & $clinetIPAddress & " and udp.DstPort != "& $udpPort
+	  Local $filter = "outbound"
+	  ControlSetText($hWnd,"", "Edit1", $filter)
 
-   ; set check box for lag (delay)
-   ControlClick($hWnd, "","Button4", "left", 1,8,8) ;1 click 8,8 coordinate
+	  ; set check box for lag (delay)
+	  ControlClick($hWnd, "","Button4", "left", 1,8,8) ;1 click 8,8 coordinate
 
-   ;set check box for drop
-   ControlClick($hWnd, "","Button7", "left", 1,8,8)
+	  ;set check box for drop
+	  ControlClick($hWnd, "","Button7", "left", 1,8,8)
+	  Return $hWnd
 
-   Return $hWnd
-EndFunc
+   ElseIf $cmd = "configure" Then
+	  ;make sure it is active
+	  WinActivate($hWnd)
 
-Func ChangeNetwork($hWnd, $RTT, $loss)
+	  ;set delay
+	  ControlSetText($hWnd,"", "Edit2", $RTT)
 
-   ;make sure it is active
-   WinActivate($hWnd)
+	  ;add packet drop
+	  ControlSetText($hWnd,"", "Edit3", $loss)
 
-   ;stop clumsy
-   ;ControlClick($hWnd, "","Button2", "left", 1,8,8)
+   ElseIf $cmd = "start" Then
+	  ;click the start button
+	  ControlClick($hWnd, "","Button2", "left", 1,8,8)
 
-   ;set delay
-   ControlSetText($hWnd,"", "Edit2", $RTT)
+   ElseIf $cmd = "stop" Then
+	  ;click the start button
+	  ControlClick($hWnd, "","Button2", "left", 1,8,8)
 
-   ;add packet drop
-   ControlSetText($hWnd,"", "Edit3", $loss)
-
-   ;start
-   ControlClick($hWnd, "","Button2", "left", 1,8,8)
-
+   EndIf
 EndFunc
 
 Func DoneWnd ($Form2)
@@ -325,33 +322,24 @@ Func arrowWnd($Form2)
    GuiDelete($Form2)
 EndFunc
 
-Func InfoWnd ($text)
+Func InfoWnd ($text, $imgNo=0)
    If $text == 1 Then
-	  $infoText = "To open the first image click on: File -> Open -> Pictures (from the leftside bar) -> 3601."
+	  $infoText = "Open an image by clicking on: File -> Open -> Pictures (from the leftside bar) -> " & $imgNo & ".jpg. Click Ok when the image is loaded."
    ElseIf $text == 2 Then
-	  $infoText = "Zoom-in and out by rolling the mouse ball and click and drag to explore the photo"
+	  $infoText = "Zoom-in and out by rolling the mouse ball and click and drag to explore the photo. After few seconds a window will appear to ask you about your experience. Click Ok to start"
    Else
 	  $infoText = "Move the cursor to the middle of the left side of the image, an arrow will appear, click on it to move to the next photo."
    EndIf
 
-   $Form1 = GUICreate("Info", 850, 100,300,10)
-   $Label1 = GUICtrlCreateLabel($infoText, 8, 16, 845, 81)
-   ;$Button1 = GUICtrlCreateButton("Ok", 370, 120, 75, 25)
+   $Form1 = GUICreate("Info", 850, 120);,800,40) ;width [, height [, left = -1 [, top = -1
+   $Label1 = GUICtrlCreateLabel($infoText, 8, 16, 845, 70) ; left, top [, width [, height
+   $Button1 = GUICtrlCreateButton("Ok", 400, 80, 75, 25) ; left, top [, width [, height
 
    ; setup the font size
    ;GUICtrlSetFont($Button1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
    GUICtrlSetFont($Label1, 15, $FW_NORMAL)
    WinSetOnTop($Form1,"",$WINDOWS_ONTOP);to make the window always on top
 
-   GUISetState(@SW_SHOW)
-   If  $text == 1 or $text == 2 Then
-	  Sleep($interval)
-	  DoneWnd ($Form1)
-   Else
-	  arrowWnd($Form1)
-   EndIf
-
-   #comments-start
 
    GUISetState(@SW_SHOW)
    While 1
@@ -364,7 +352,7 @@ Func InfoWnd ($text)
 	   EndSwitch
    WEnd
    GuiDelete($Form1)
-   #comments-end
+
 EndFunc
 
 
