@@ -32,7 +32,7 @@ Local $appName  = "C:\Program Files (x86)\Insta360 Player\Insta360Player.exe"
 Local $winTitle = "Insta360Player"
 Local $station = "A1"
 Local $activity = "Insta360"
-Local $interval = 15000;15000;time interval before each QoE survey
+Local $interval = 3000;15000;time interval before each QoE survey
 Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
 
 ;============================= Create a file for results======================

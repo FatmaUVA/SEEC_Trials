@@ -25,8 +25,8 @@
 #RequireAdmin
 
 Local $station = "A1"
-Local $activity [2] = ["activ.1-video.au3" , "activ.3-Game.au3"];["activ.1-video.au3", "activ.3-Game-jigsaw.au3"];, "A-360player.au3"];[ "activ.3-Game-jigsaw.au3","activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game.au3"]
-Local $dir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
+Local $activity [3] = ["imageView-trial.au3", "Insta360-trial.au3", "skype.au3" ];["activ.1-video.au3" , "activ.3-Game.au3"];["activ.1-video.au3", "activ.3-Game-jigsaw.au3"];, "A-360player.au3"];[ "activ.3-Game-jigsaw.au3","activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game.au3"]
+Local $dir = "C:\Users\Harlem5\Desktop\AUtoIT-scripts\SEEC_Trials\"
 
 ;=========================== Read the user index to write results===================
 ;create a file to hold user index number (asociated with the pre-survey number
@@ -54,7 +54,6 @@ FileClose($hIndexFile)
 ;informed consent pre-survey
 ;$dir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
 $scriptName = "pre-survey.au3"
-;RunWait(@AutoItExe & ' /AutoIt3ExecuteScript "C:\Users\harlem1\Desktop\AUtoIT-scripts\pre-survey.au3"')
 RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
 
 ;pre-survey
@@ -78,7 +77,7 @@ Func ThankYou()
 
    $msg = "Would you like to continue with the 2018 Technology Trial, if so please click continue. If not, thank you for volunteering to participate in our study, click Exit to leave"
 
-   $Form1 = GUICreate("Thank You", 886, 288, 288, 177)
+   $Form1 = GUICreate("Thank You", 886, 288) ;, 288, 177)
    $Label1 = GUICtrlCreateLabel($msg, 16, 24, 852, 177)
    $Button1 = GUICtrlCreateButton("Continue", 232, 232, 163, 33)
    $Button2 = GUICtrlCreateButton("Exit", 504, 232, 163, 33)
@@ -87,6 +86,7 @@ Func ThankYou()
    GUICtrlSetFont($Label1, 20, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
    GUICtrlSetFont($Button1,15, $FW_NORMAL)
    GUICtrlSetFont($Button2, 15, $FW_NORMAL)
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP);to make the window always on top
 
    GUISetState(@SW_SHOW)
    While 1
@@ -115,6 +115,7 @@ Func LastThankYou()
    ; setup the font size
    GUICtrlSetFont($Label1, 20, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
    GUICtrlSetFont($Button1,15, $FW_NORMAL)
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP);to make the window always on top
 
    GUISetState(@SW_SHOW)
 

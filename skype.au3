@@ -27,17 +27,13 @@ Opt("WinTitleMatchMode",-2) ;1=start, 2=subStr, 3=exact, 4=advanced, -1 to -4=No
 ; ============================ Parameters initialization ====================
 ; QoS
 Local $aRTT[1] = [0]
-Local $aLoss[2] = [0,5] ;packet loss rate, unit is %
+Local $aLoss[3] = [0,3,5] ;packet loss rate, unit is %
 ;Local $appName  = "C:\Program Files (x86)\Insta360 Player\Insta360Player.exe"
 ;Local $winTitle = "Insta360Player"
 Local $station = "A1"
 Local $activity = "Skype"
-Local $interval = 3000;time interval before each QoE survey
-
-
-Local $logDir = "C:\Users\Harlem5\SEEC\Windows-scripts"
-local $picsDir1 = $logDir & "\Pics6\" ;this dir for small images with small no of unique pixels
-
+Local $interval = 40000 ;time interval before each QoE survey
+Local $appName = "C:\Users\Harlem5\Desktop\Skype.lnk"
 Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
 
 
@@ -81,7 +77,7 @@ ClumsyWndInfo()
 Local $hClumsy = Clumsy("", "open")
 
 ;open Skype
-ShellExecute("C:\Users\Harlem5\Desktop\Skype.lnk", "", @SW_MAXIMIZE)
+ShellExecute($appName, "", @SW_MAXIMIZE)
 $hApp = WinWaitActive("Skype")
 
 ;make Skype call
@@ -269,54 +265,6 @@ Func Clumsy($hWnd, $cmd, $RTT=0, $loss=0)
 	  ControlClick($hWnd, "","Button2", "left", 1,8,8)
 
    EndIf
-EndFunc
-
-Func DoneWnd ($Form2)
-   $Form1 = GUICreate("Rate", 230, 69, 1449, 908);width [, height [, left = -1 [, top = -1 222
-   $Button1 = GUICtrlCreateButton("Rate your Experiance", 8, 16, 220, 41) ; left, top [, width [, height
-   ; $Label1 = GUICtrlCreateLabel("", 8, 16, 200, 50)
-
-   ; setup the font size
-   ;GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
-   GUICtrlSetFont($Button1, 16, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
-   WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
-
-   GUISetState(@SW_SHOW)
-   While 1
-	   $nMsg = GUIGetMsg()
-	   Switch $nMsg
-		   Case $GUI_EVENT_CLOSE
-			   ExitLoop
-		   Case $Button1
-			  ExitLoop
-	   EndSwitch
-   WEnd
-   GuiDelete($Form1)
-   GuiDelete($Form2)
-EndFunc
-
-Func arrowWnd($Form2)
-  $Form1 = GUICreate("Info", 250, 300,5,350);1450, 770);width,height,left,top
-   $Label1 = GUICtrlCreateLabel("Click OK when done ", 8, 8, 210, 50) ;left,top,width,height
-   Local $pic = GUICtrlCreatePic("C:\Users\Harlem1\Desktop\AUtoIT-scripts\arrow.jpg",90,80,100,50);left,top,width,height
-   $Button1 = GUICtrlCreateButton("OK", 100,230, 75, 25)
-   ; setup the font size
-   GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
-   GUICtrlSetFont($Button1, 18, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
-   WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
-
-   GUISetState(@SW_SHOW)
-   While 1
-	   $nMsg = GUIGetMsg()
-	   Switch $nMsg
-		   Case $GUI_EVENT_CLOSE
-			   ExitLoop
-		   Case $Button1
-			  ExitLoop
-	   EndSwitch
-   WEnd
-   GuiDelete($Form1)
-   GuiDelete($Form2)
 EndFunc
 
 Func InfoWnd ($text)
