@@ -104,7 +104,7 @@ WinMove($hApp2,"",0,0,@DesktopWidth, @DesktopHeight)
 
 
 For $i = 0 To UBound($aRTT) - 1
-   For $j = 0 To 0 ; UBound($aLoss) - 1
+   For $j = 0 To UBound($aLoss) - 1
 
 	  ;start clumsy
 	  Clumsy($hClumsy, "configure",$aRTT[$i], $aloss[$j])
@@ -190,7 +190,6 @@ Func ClumsyWndInfo() ; function to tell people not to touch clumsy window
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 100)
    Local $pic = GUICtrlCreatePic( @ScriptDir & "\clumsy-wnd.jpg",230,100,575,420)
    $Button1 = GUICtrlCreateButton("Ok", 424, 550, 147, 33)
-0
 
    ; setup the font size
    GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.

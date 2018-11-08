@@ -80,6 +80,8 @@ Local $hClumsy = Clumsy("", "open")
 ShellExecute($appName, "", @SW_MAXIMIZE)
 $hApp = WinWaitActive("Skype")
 
+Sleep(3000)
+
 ;make Skype call
 sleep(2000)
 MouseClick("left", 126, 241)
@@ -99,7 +101,7 @@ For $i = 0 To UBound($aRTT) - 1
 	  ;ChangeNetwork($hWnd, $aRTT[$i], $aloss[$j])
 
 	  ;wait 40 seconds
-	  sleep(3000)
+	  sleep($interval)
 	  $sQoE = Survey()
 
 	  ;Write results to the File

@@ -32,7 +32,7 @@ Local $appName  = "C:\Program Files (x86)\Insta360 Player\Insta360Player.exe"
 Local $winTitle = "Insta360Player"
 Local $station = "A1"
 Local $activity = "Insta360"
-Local $interval = 3000;15000;time interval before each QoE survey
+Local $interval = 15000;time interval before each QoE survey
 Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
 
 ;============================= Create a file for results======================
@@ -165,7 +165,6 @@ Func ClumsyWndInfo() ; function to tell people not to touch clumsy window
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 100)
    Local $pic = GUICtrlCreatePic(@ScriptDir & "\clumsy-wnd.jpg",230,100,575,420)
    $Button1 = GUICtrlCreateButton("Ok", 424, 550, 147, 33)
-0
 
    ; setup the font size
    GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
