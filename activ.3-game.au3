@@ -27,7 +27,7 @@
 Local $aRTT[2] = [0,50]
 Local $aLoss[2] = [0,1] ;packet loss rate, unit is %
 Local $interval = 30000;time intervalbefore each QoE survey
-Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
+Local $videoDir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 Local $appName= "C:\Users\harlem1\Desktop\Candy Crush Saga.lnk"
 Local $winTitle = "Candy Crush Saga"
 Local $station = "A3"

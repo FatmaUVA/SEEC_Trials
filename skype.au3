@@ -32,7 +32,7 @@ Local $aLoss[3] = [0,3,5] ;packet loss rate, unit is %
 ;Local $winTitle = "Insta360Player"
 Local $station = "A1"
 Local $activity = "Skype"
-Local $interval = 40000 ;time interval before each QoE survey
+Local $interval = 3000 ;40000 ;time interval before each QoE survey
 Local $appName = "C:\Users\Harlem5\Desktop\Skype.lnk"
 Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
 

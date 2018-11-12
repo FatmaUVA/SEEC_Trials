@@ -26,7 +26,7 @@
 ; QoS
 Local $aRTT[3] = [0,50, 150]
 Local $aLoss[3] = [0,0.05,1] ;packet loss rate, unit is %
-Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
+Local $videoDir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 ;Local $vdieoName = "Fast Five Stealing The Vault Scene.mp4"
 Local $vdieoName= "COSMOS.mp4"
 Local $timeInterval = 24000 ;in ms

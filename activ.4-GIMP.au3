@@ -26,7 +26,7 @@
 ; QoS
 Local $aRTT[3] = [100,100, 50]
 Local $aLoss[3] = [1,2,0.1] ;packet loss rate, unit is %
-Local $videoDir = "C:\Users\harlem1\Desktop\AUtoIT-scripts\"
+Local $videoDir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 Local $appName= "gimp-2.10.exe"
 Local $winTitle = "GNU Image Manipulation Program"
 Local $station = "A1"

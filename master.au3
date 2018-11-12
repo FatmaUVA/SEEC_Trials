@@ -26,7 +26,7 @@
 
 Local $station = "A1"
 Local $activity [3] = ["imageView-trial.au3", "Insta360-trial.au3", "skype.au3" ];["activ.1-video.au3" , "activ.3-Game.au3"];["activ.1-video.au3", "activ.3-Game-jigsaw.au3"];, "A-360player.au3"];[ "activ.3-Game-jigsaw.au3","activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game.au3"]
-Local $dir = "C:\Users\Harlem5\Desktop\AUtoIT-scripts\SEEC_Trials\"
+Local $dir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 
 ;=========================== Read the user index to write results===================
 ;create a file to hold user index number (asociated with the pre-survey number

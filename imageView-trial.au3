@@ -34,7 +34,7 @@ Local $station = "A1"
 Local $activity = "ImageView"
 ;Local $interval = 3000;time interval before each QoE survey
 
-Local $logDir = "C:\Users\Harlem5\Desktop\AUtoIT-scripts\SEEC_Trials\"
+Local $logDir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 local $picsDir1 = $logDir & "pics1\" ;this dir for small images with small no of unique pixels
 local $picDirName1 = "pics1"
 local $picsDir2 = $logDir & "pics2\" ;this dir for larger images with larger no of unique pixels
