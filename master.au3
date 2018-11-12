@@ -25,8 +25,52 @@
 #RequireAdmin
 
 Local $station = "A1"
-Local $activity [3] = ["imageView-trial.au3", "Insta360-trial.au3", "skype.au3" ];["activ.1-video.au3" , "activ.3-Game.au3"];["activ.1-video.au3", "activ.3-Game-jigsaw.au3"];, "A-360player.au3"];[ "activ.3-Game-jigsaw.au3","activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game.au3"]
+;Local $activity1 [3] = ["imageView-trial.au3", "Insta360-trial.au3", "skype.au3" ];["activ.1-video.au3" , "activ.3-Game.au3"];["activ.1-video.au3", "activ.3-Game-jigsaw.au3"];, "A-360player.au3"];[ "activ.3-Game-jigsaw.au3","activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game.au3"]
 Local $dir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
+
+
+;=========================== Read the randomize number for activities order===================
+
+Global $indexFile = $dir & $station & "-random-num.txt"
+; Open the file for reading and store the handle to a variable.
+Local $hIndexFile = FileOpen($indexFile, $FO_READ)
+
+; Read the contents of the file using the handle returned by FileOpen.
+Local $userIndex = FileRead($hIndexFile)
+
+; Close the handle returned by FileOpen.
+FileClose($hIndexFile)
+;MsgBox($MB_SYSTEMMODAL, "", "Contents of the file:" & @CRLF & $userIndex)
+
+$ranNo=Number($userIndex)
+$x = Mod($ranNo + 1,6); six combination based on 0, 1,2,3,4,5
+;MsgBox($MB_SYSTEMMODAL, "", "Contents of the file after addition:" & @CRLF & $x)
+;Open file again to write the new index
+Global $hIndexFile = FileOpen($indexFile, $FO_OVERWRITE)
+FileWrite($hIndexFile,$x)
+FileClose($hIndexFile)
+
+;=========================== Define activities based on station and random number ====================
+If $station == "A1" Then
+   Local $activity1 [3] = ["imageView-trial.au3", "Insta360-trial.au3", "skype.au3" ]
+ElseIf $station == "A2" Then
+   Local $activity1 [3] = ["imageView-trial.au3", "Insta360-trial.au3", "activ.1-video.au3" ]
+EndIf
+
+If $ranNo == 0 Then
+   Local $activity [3] = [$activity1[0], $activity1[1], $activity1[2]]
+ElseIf  $ranNo == 1 Then
+	Local $activity [3] = [$activity1[1], $activity1[0], $activity1[2]]
+ElseIf  $ranNo == 2 Then
+	Local $activity [3] = [$activity1[2], $activity1[0], $activity1[1]]
+ElseIf  $ranNo == 3 Then
+	Local $activity [3] = [$activity1[2], $activity1[1], $activity1[0]]
+ElseIf  $ranNo == 4 Then
+	Local $activity [3] = [$activity1[0], $activity1[2], $activity1[1]]
+ElseIf  $ranNo == 5 Then
+	Local $activity [3] = [$activity1[1], $activity1[2], $activity1[0]]
+ EndIf
+
 
 ;=========================== Read the user index to write results===================
 ;create a file to hold user index number (asociated with the pre-survey number
@@ -58,13 +102,13 @@ RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
 
 ;pre-survey
 $scriptName = "pre-survey-questions.au3" ;
-RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
+RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName &" " & $station)
 
 For $i = 0 To UBound($activity) - 1
 
    ;start activity
    $scriptName = $activity [$i]
-   RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
+   RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptNam &" " & $station)
 
    ;Thank you window
    ThankYou()
@@ -130,7 +174,6 @@ Func LastThankYou()
    WEnd
    GuiDelete($Form1)
 EndFunc
-
 
 
 

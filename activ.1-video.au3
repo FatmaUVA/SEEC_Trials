@@ -30,7 +30,8 @@ Local $videoDir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 ;Local $vdieoName = "Fast Five Stealing The Vault Scene.mp4"
 Local $vdieoName= "Zootopia2.mp4"
 Local $timeInterval = 35000 ;24000 ;in ms
-Local $station = "A1" ;A for protocol A nad B for Protocol B
+Local $station = $CmdLine[1]
+;Local $station = "A1" ;A for protocol A nad B for Protocol B
 Local $activity = "video"
 Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
 Local $winTitle = "Movies & TV"
@@ -153,7 +154,8 @@ WinClose($hApp)
 ;============================ Task Description ===================================
 Func TaskDesc()
    ;MsgBox($MB_OK,"Task Description"," During this task you will be asked to watch a 5 minutes video about the internet research that is ongoing in Harlem. The video will pause every 30 seconds and a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the quality of the video and audio and not the content of the video.")
-   $taskDesc = "During this task you will be asked to watch a 5 minutes video about the internet research that is ongoing in Harlem. The video will pause every 30 seconds and a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the quality of the video and audio and not the content of the video."
+   ;$taskDesc = "During this task you will be asked to watch a 5 minutes video about the internet research that is ongoing in Harlem. The video will pause every 30 seconds and a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the quality of the video and audio and not the content of the video."
+   $taskDesc = "Please put on the headset on the desk, you are about to watch a 2 minutes video. The video will pause every 35 seconds and a window will appear and ask you a question.  The question will ask you to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the quality of the video and audio and not the content of the video."
    $Form1 = GUICreate("Task Description", 971, 442)
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 313)
    $Button1 = GUICtrlCreateButton("Ok", 424, 384, 147, 33)
@@ -161,6 +163,32 @@ Func TaskDesc()
    ; setup the font size
    GUICtrlSetFont($Label1, 20, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
    GUICtrlSetFont($Button1, 15, $FW_NORMAL)
+
+   GUISetState(@SW_SHOW)
+   While 1
+	   $nMsg = GUIGetMsg()
+	   Switch $nMsg
+		 Case $GUI_EVENT_CLOSE
+			ExitLoop
+		 Case $Button1
+			ExitLoop
+	   EndSwitch
+	WEnd
+   GuiDelete($Form1)
+EndFunc
+
+Func ClumsyWndInfo() ; function to tell people not to touch clumsy window
+
+   $taskDesc = "The window shown below will appear temporarily during the activity. Do not click on any of the buttons."
+   $Form1 = GUICreate("Task Description", 971, 600,-1,-1)
+   $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 100)
+   Local $pic = GUICtrlCreatePic( @ScriptDir & "\clumsy-wnd.jpg",230,100,575,420)
+   $Button1 = GUICtrlCreateButton("Ok", 424, 550, 147, 33)
+0
+
+   ; setup the font size
+   GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
+   WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
 
    GUISetState(@SW_SHOW)
    While 1
@@ -226,70 +254,6 @@ Func survey()
 
 EndFunc
 
-Func WriteToFile($sQoE)
-; Append a line
-FileWrite($hFilehandle, @CRLF & $sQoE)
-EndFunc
-
-Func OpenClumsy()
-   ShellExecute("C:\Users\harlem1\Downloads\clumsy-0.2-win64\clumsy.exe")
-   Local $hWnd = WinWaitActive("clumsy 0.2")
-   ;basic setup
-   ; clear the filter text filed
-   ControlSetText($hWnd,"", "Edit1", "outbound")
-
-   ; set check box for lag (delay)
-   ControlClick($hWnd, "","Button4", "left", 1,8,8) ;1 click 8,8 coordinate
-
-   ;set check box for drop
-   ControlClick($hWnd, "","Button7", "left", 1,8,8)
-
-   Return $hWnd
-EndFunc
-
-Func ChangeNetwork($hWnd, $RTT, $loss)
-
-   ;make sure it is active
-   WinActivate($hWnd)
-
-   ;stop clumsy
-   ControlClick($hWnd, "","Button2", "left", 1,8,8)
-
-   ;set delay
-   ControlSetText($hWnd,"", "Edit2", $RTT)
-
-   ;add packet drop
-   ControlSetText($hWnd,"", "Edit3", $loss)
-
-   ;start
-   ControlClick($hWnd, "","Button2", "left", 1,8,8)
-
-EndFunc
-
-Func ClumsyWndInfo() ; function to tell people not to touch clumsy window
-
-   $taskDesc = "The window shown below will appear temporarily during the activity. Do not click on any of the buttons."
-   $Form1 = GUICreate("Task Description", 971, 600,-1,-1)
-   $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 100)
-   Local $pic = GUICtrlCreatePic(@ScriptDir & "\clumsy-wnd.jpg",230,100,575,420)
-   $Button1 = GUICtrlCreateButton("Ok", 424, 550, 147, 33)
-
-   ; setup the font size
-   GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
-   WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
-
-   GUISetState(@SW_SHOW)
-   While 1
-	   $nMsg = GUIGetMsg()
-	   Switch $nMsg
-		 Case $GUI_EVENT_CLOSE
-			ExitLoop
-		 Case $Button1
-			ExitLoop
-	   EndSwitch
-	WEnd
-   GuiDelete($Form1)
-EndFunc
 
 
 Func Clumsy($hWnd, $cmd, $RTT=0, $loss=0)

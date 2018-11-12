@@ -20,7 +20,7 @@
 #include <GuiScrollBars.au3>
 
 
-Local $station = "A1"
+Local $station = $CmdLine[1]
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
