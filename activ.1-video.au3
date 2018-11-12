@@ -24,14 +24,16 @@
 
 ; ============================ Parameters initialization ====================
 ; QoS
-Local $aRTT[3] = [0,50, 150]
-Local $aLoss[3] = [0,0.05,1] ;packet loss rate, unit is %
+Local $aRTT[1] = [0]
+Local $aLoss[3] = [0,3,5] ;packet loss rate, unit is %
 Local $videoDir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 ;Local $vdieoName = "Fast Five Stealing The Vault Scene.mp4"
-Local $vdieoName= "COSMOS.mp4"
-Local $timeInterval = 24000 ;in ms
+Local $vdieoName= "Zootopia2.mp4"
+Local $timeInterval = 35000 ;24000 ;in ms
 Local $station = "A1" ;A for protocol A nad B for Protocol B
 Local $activity = "video"
+Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
+Local $winTitle = "Movies & TV"
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
@@ -65,8 +67,9 @@ FileClose($hIndexFile)
 TaskDesc()
 ClumsyWndInfo()
 ;================================ Start activity =========================
+
+#comments-start
 ;open the video
-;ShellExecute("C:\Users\harlem1\Desktop\AUtoIT-scripts\COSMOS.mp4")
 ShellExecute($videoDir & $vdieoName)
 ;Local $hApp = WinWaitActive("COSMOS.mp4 - VLC media player")
 Local $hApp = WinWaitActive($vdieoName & " - VLC media player")
@@ -82,27 +85,53 @@ Local $sQoE = survey()
 
 ;write results to File
 FileWrite($hFilehandle, $x & " "&"0 0 " & $sQoE & @CRLF)
+#comments-EndFunc
 
 ;change configuration with clumsy
 ;First start clumsy and set basic parameters
-Local $hWnd = OpenClumsy()
+Local $hClumsy = Clumsy("", "open")
+;Local $hWnd = OpenClumsy()
+
+ShellExecute($videoDir & $vdieoName)
+;Local $hApp = WinWaitActive($vdieoName & " - VLC media player")
+Local $hApp = WinWaitActive($winTitle)
+
+Sleep($timeInterval)
+
+; pause video
+Send("{SPACE}")
+MouseClick($MOUSE_CLICK_LEFT, 500,500,2) ;to quit full screen, because in full screen mode QoS survey won't show
+;Survey
+$sQoE = Survey()
+
+;Write results to the File
+FileWrite($hFilehandle, $x & " "& $aRTT[0] & " " & $aLoss[0] & " " & $sQoE & @CRLF)
+
 
 For $i = 0 To UBound($aRTT) - 1
-   For $j = 0 To UBound($aLoss) - 1
+   For $j = 1 To UBound($aLoss) - 1
 
 	  ;start clumsy
-	  ChangeNetwork($hWnd, $aRTT[$i], $aloss[$j])
+	  ;ChangeNetwork($hWnd, $aRTT[$i], $aloss[$j])
+	  ;start clumsy
+	  Clumsy($hClumsy, "configure",$aRTT[$i], $aloss[$j])
+	  Clumsy($hClumsy, "start")
+	  WinSetState($hClumsy, "", @SW_MINIMIZE)
 
 	  ;activate app window
 	  WinActivate($hApp)
 
+
 	  ;resume video
 	  Send("{SPACE}")
+	  MouseClick($MOUSE_CLICK_LEFT,500,500,2) ;to quit full screen, because in full screen mode QoS survey won't show
+
 	  ;sleep for xx sec
 	  Sleep($timeInterval)
 
 	  ;pause video
 	  Send("{SPACE}")
+	  MouseClick($MOUSE_CLICK_LEFT,500,500,2) ;to quit full screen, because in full screen mode QoS survey won't show
 
 	  ;Survey
 	  $sQoE = Survey()
@@ -114,7 +143,7 @@ For $i = 0 To UBound($aRTT) - 1
 Next
 
 ;stop network emulator
-WinClose($hWnd)
+WinClose($hClumsy)
 
 ;close the File
 FileClose($hFilehandle)
@@ -150,15 +179,23 @@ EndFunc
 Func survey()
    $Form1 = GUICreate("Quality of Experience Survey", 671, 184, -1, -1)
    Global $Radio1 = GUICtrlCreateRadio("1 (Bad)", 40, 64, 113, 17)
-   Global $Radio2 = GUICtrlCreateRadio("2", 153, 64, 113, 17)
-   Global $Radio3 = GUICtrlCreateRadio("3", 266, 64, 113, 17)
-   Global $Radio4 = GUICtrlCreateRadio("4", 393, 64, 113, 17)
+   Global $Radio2 = GUICtrlCreateRadio("2 (Poor)", 153, 64, 113, 17)
+   Global $Radio3 = GUICtrlCreateRadio("3 (Fair)", 266, 64, 113, 17)
+   Global $Radio4 = GUICtrlCreateRadio("4 (Good)", 393, 64, 113, 17)
    Global $Radio5 = GUICtrlCreateRadio("5 (Excellent)", 535, 64, 113, 17)
    Global $Group1 = GUICtrlCreateGroup("How do you rate your experience?", 32, 32, 601, 65)
    GUICtrlCreateGroup("", -99, -99, 1, 1)
    Global $Button1 = GUICtrlCreateButton("Submit", 304, 128, 75, 25)
    GUISetState(@SW_SHOW)
    WinSetOnTop($Form1,"",$WINDOWS_ONTOP);to make the window always on top
+
+   GUICtrlSetFont($Button1, 11, $FW_NORMAL)
+   GUICtrlSetFont($Group1, 11, $FW_NORMAL)
+   GUICtrlSetFont($Radio1, 11, $FW_NORMAL)
+   GUICtrlSetFont($Radio2, 11, $FW_NORMAL)
+   GUICtrlSetFont($Radio3, 11, $FW_NORMAL)
+   GUICtrlSetFont($Radio4, 11, $FW_NORMAL)
+   GUICtrlSetFont($Radio5, 11, $FW_NORMAL)
 
     ; Loop until the user clicks submit
     While 1
@@ -183,6 +220,7 @@ Func survey()
 		 ExitLoop
 	  EndSelect
    WEnd
+
    GuiDelete($Form1)
    Return $sQoE
 
@@ -233,20 +271,14 @@ Func ClumsyWndInfo() ; function to tell people not to touch clumsy window
    $taskDesc = "The window shown below will appear temporarily during the activity. Do not click on any of the buttons."
    $Form1 = GUICreate("Task Description", 971, 600,-1,-1)
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 100)
-   Local $pic = GUICtrlCreatePic("C:\Users\Harlem1\Desktop\AUtoIT-scripts\clumsy-wnd.jpg",230,100,575,420)
+   Local $pic = GUICtrlCreatePic(@ScriptDir & "\clumsy-wnd.jpg",230,100,575,420)
    $Button1 = GUICtrlCreateButton("Ok", 424, 550, 147, 33)
-0
 
    ; setup the font size
    GUICtrlSetFont($Label1, 15, $FW_NORMAL) ; Set the font of the controlID stored in $iLabel2.
    WinSetOnTop($Form1,"",$WINDOWS_ONTOP)
 
    GUISetState(@SW_SHOW)
-
-   Sleep(3000)
-   GuiDelete($Form1)
-   Return 0
-
    While 1
 	   $nMsg = GUIGetMsg()
 	   Switch $nMsg
@@ -257,4 +289,44 @@ Func ClumsyWndInfo() ; function to tell people not to touch clumsy window
 	   EndSwitch
 	WEnd
    GuiDelete($Form1)
+EndFunc
+
+
+Func Clumsy($hWnd, $cmd, $RTT=0, $loss=0)
+
+   If $cmd = "open" Then
+	  ShellExecute($clumsyDir & "clumsy-0.2-win64\clumsy.exe")
+	  $hWnd = WinWaitActive("clumsy 0.2")
+	  ;basic setup
+	  ; clear the filter text filed
+	  ;Local $filter = "outbound and ip.DstAddr==" & $clinetIPAddress & " and udp.DstPort != "& $udpPort
+	  Local $filter = "outbound"
+	  ControlSetText($hWnd,"", "Edit1", $filter)
+
+	  ; set check box for lag (delay)
+	  ControlClick($hWnd, "","Button4", "left", 1,8,8) ;1 click 8,8 coordinate
+
+	  ;set check box for drop
+	  ControlClick($hWnd, "","Button7", "left", 1,8,8)
+	  Return $hWnd
+
+   ElseIf $cmd = "configure" Then
+	  ;make sure it is active
+	  WinActivate($hWnd)
+
+	  ;set delay
+	  ControlSetText($hWnd,"", "Edit2", $RTT)
+
+	  ;add packet drop
+	  ControlSetText($hWnd,"", "Edit3", $loss)
+
+   ElseIf $cmd = "start" Then
+	  ;click the start button
+	  ControlClick($hWnd, "","Button2", "left", 1,8,8)
+
+   ElseIf $cmd = "stop" Then
+	  ;click the start button
+	  ControlClick($hWnd, "","Button2", "left", 1,8,8)
+
+   EndIf
 EndFunc
