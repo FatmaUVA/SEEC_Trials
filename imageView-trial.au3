@@ -160,7 +160,7 @@ FileClose($hFilehandle2)
 ;============================ Task Description ===================================
 Func TaskDesc()
 
-   $taskDesc = "During this task you will be asked to look at different images. After each set of images you will be asked to rate your experience so far from bad (1) to excellent (5). Please rate your experience based on the responsiveness of the software and the image quality and not the content of the image"
+   $taskDesc = "During this task you will be asked to look at different images. After each set of images you will be asked to rate your experience so far from bad (1) to excellent (5). You will be asked to rate the same set of images more than once. This is not an error. Please rate your experience based on the responsiveness of the software and the image quality and not the content of the image"
    $Form1 = GUICreate("Task Description", 971, 442,-1,-1)
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 313)
    $Button1 = GUICtrlCreateButton("Ok", 424, 384, 147, 33)
@@ -324,7 +324,7 @@ EndFunc
 
 Func InfoWnd ($text)
    If $text == 1 Then
-	  $infoText = "Click on the first image (1.jpg). Use the keyboard right arrow to navigate between images. When you reach the last imgae (when clicking on the right arrow in the keyboard the image will not change), click on the right down corner button (Rate your experience) which will appear in few seconds. Click ok to start"
+	  $infoText = "Click on the first image (1.jpg). Use the keyboard right arrow to navigate between images. When you reach the last image (when clicking on the right arrow in the keyboard the image will not change), click on the right down corner button (Rate your experience) which will appear in few seconds. Click ok to start"
    ElseIf $text == 2 Then
 	  $infoText = "Zoom-in and out by rolling the mouse ball and click and drag to explore the photo"
    Else

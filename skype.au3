@@ -130,7 +130,7 @@ FileClose($hFilehandle)
 ;============================ Task Description ===================================
 Func TaskDesc()
 
-   $taskDesc = "You are about to take part in a 3 minute Skype call with a researcher next door. Every forty seconds, you will be asked to rate your experience from bad (1) to excellent (5). Please rate your experience based on the quality of the video."
+   $taskDesc = "Please put on the headset on the desk. You are about to take part in a Skype call that will last for approximately 3 minutes with a researcher next door. Every forty seconds, you will be asked to rate your experience from bad (1) to excellent (5). Please rate your experience based on the quality of the video."
    $Form1 = GUICreate("Task Description", 971, 442,-1,-1)
    $Label1 = GUICtrlCreateLabel($taskDesc, 32, 32, 916, 313)
    $Button1 = GUICtrlCreateButton("Ok", 424, 384, 147, 33)
