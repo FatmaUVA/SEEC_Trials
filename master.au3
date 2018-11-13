@@ -24,7 +24,7 @@
 ;#pragma compile(AutoItExecuteAllowed, true)
 #RequireAdmin
 
-Local $station = "A1"
+Global $station = "A1"
 ;Local $activity1 [3] = ["imageView-trial.au3", "Insta360-trial.au3", "skype.au3" ];["activ.1-video.au3" , "activ.3-Game.au3"];["activ.1-video.au3", "activ.3-Game-jigsaw.au3"];, "A-360player.au3"];[ "activ.3-Game-jigsaw.au3","activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game.au3"]
 Local $dir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 
@@ -104,14 +104,21 @@ RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
 $scriptName = "pre-survey-questions.au3" ;
 RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName &" " & $station)
 
+
+$count=0
 For $i = 0 To UBound($activity) - 1
 
    ;start activity
-   $scriptName = $activity [$i]
-   RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptNam &" " & $station)
+   $scriptName = $activity[$i]
+   RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName & " " & $station)
 
-   ;Thank you window
-   ThankYou()
+   $count = $count + 1
+
+   ; if this is the last activity don't show the ThankYou window
+   If $count < UBound($activity) Then
+	  ;Thank you window
+	  ThankYou()
+   EndIf
 
 Next
 
