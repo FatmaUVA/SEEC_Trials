@@ -29,7 +29,7 @@ Opt("WinTitleMatchMode",-2) ;1=start, 2=subStr, 3=exact, 4=advanced, -1 to -4=No
 Local $aRTT[1] = [0]
 Local $aLoss[3] = [0,3,5] ;packet loss rate, unit is %
 Local $station = $CmdLine[1]
-;Local $station = "A1"
+;Local $station = "A33"
 Local $activity = "ImageView"
 ;Local $interval = 3000;time interval before each QoE survey
 
@@ -90,10 +90,10 @@ ClumsyWndInfo()
 Local $hClumsy = Clumsy("", "open")
 
 ;open the app (directory where the images are)
-ShellExecute($picsDir1, "", @SW_MAXIMIZE)
-$hApp1 = WinWaitActive($picDirName1)
+;ShellExecute($picsDir1, "", @SW_MAXIMIZE)
+;$hApp1 = WinWaitActive($picDirName1)
 ;maximizing the window is not working, so I'm doing it manually
-WinMove($hApp1,"",0,0,@DesktopWidth, @DesktopHeight)
+;WinMove($hApp1,"",0,0,@DesktopWidth, @DesktopHeight)
 
 ;open the app (directory where the images are)
 ShellExecute($picsDir2, "", @SW_MAXIMIZE)
@@ -112,16 +112,16 @@ For $i = 0 To UBound($aRTT) - 1
 	  ;ChangeNetwork($hWnd, $aRTT[$i], $aloss[$j])
 
 	  ;activate app window
-	  WinActivate($hApp1)
+	  ;WinActivate($hApp1)
 
-	  InfoWnd(1)
+	  ;InfoWnd(1)
 
 	  ;Survey
-	  $sQoE = Survey()
+	  ;$sQoE = Survey()
 
 	  ;Write results to the File
-	  FileWrite($hFilehandle1,  $x & " "& $aRTT[$i] & " " & $aLoss[$j] & " " & $sQoE & @CRLF)
-	  WinClose("Photos")
+	  ;FileWrite($hFilehandle1,  $x & " "& $aRTT[$i] & " " & $aLoss[$j] & " " & $sQoE & @CRLF)
+	 ;WinClose("Photos")
 
 	  ; larger image
 	  ;activate app window
@@ -149,10 +149,10 @@ Next
 WinClose($hClumsy)
 
 ;close the app (the directory)
-WinClose($hApp1)
+;WinClose($hApp1)
 WinClose($hApp2)
 ;close the File
-FileClose($hFilehandle1)
+;FileClose($hFilehandle1)
 FileClose($hFilehandle2)
 
 
