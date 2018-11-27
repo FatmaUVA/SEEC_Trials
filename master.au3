@@ -24,7 +24,7 @@
 ;#pragma compile(AutoItExecuteAllowed, true)
 #RequireAdmin
 
-Global $station = "A2"
+Global $station = "A1"
 ;Local $activity1 [3] = ["imageView-trial.au3", "Insta360-trial.au3", "skype.au3" ];["activ.1-video.au3" , "activ.3-Game.au3"];["activ.1-video.au3", "activ.3-Game-jigsaw.au3"];, "A-360player.au3"];[ "activ.3-Game-jigsaw.au3","activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game.au3"]
 Local $dir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 
@@ -52,9 +52,9 @@ FileClose($hIndexFile)
 
 ;=========================== Define activities based on station and random number ====================
 If $station == "A1" Then
-   Local $activity [3] = ["imageView-trial.au3", "Insta360-trial.au3", "skype.au3" ]
+   Local $activity [3] = ["video-same-vid-trial.au3", "Insta360-trial.au3", "skype.au3" ]
 ElseIf $station == "A2" Then
-   Local $activity [3] = ["imageView-trial.au3", "Insta360-trial.au3", "activ.1-video.au3" ]
+   Local $activity [3] = ["imageView-trial.au3", "Insta360-trial.au3", "video-same-vid-trial.au3" ]
 EndIf
 
 #comments-start
