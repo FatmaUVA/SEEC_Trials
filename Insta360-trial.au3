@@ -26,12 +26,12 @@ Opt("WinTitleMatchMode",-2) ;1=start, 2=subStr, 3=exact, 4=advanced, -1 to -4=No
 ; ============================ Parameters initialization ====================
 ; QoS
 Local $aRTT[1] = [0]
-Local $aLoss[3] = [0,3,5] ;packet loss rate, unit is %
+Local $aLoss[3] = [0,0.5,10] ;packet loss rate, unit is %
 Local $videoDir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 Local $appName  = "C:\Program Files (x86)\Insta360 Player\Insta360Player.exe"
 Local $winTitle = "Insta360Player"
-;Local $station = "A1"
-Local $station = $CmdLine[1]
+Local $station = "A33"
+;Local $station = $CmdLine[1]
 Local $activity = "Insta360"
 Local $interval = 15000;time interval before each QoE survey
 Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
@@ -83,12 +83,28 @@ $hApp = WinWaitActive($winTitle)
 ;maximizing the window is not working, so I'm doing it manually
 WinMove($hApp,"",0,0,@DesktopWidth, @DesktopHeight)
 
-
-
 $imgNo=1
 
+;look at first image without network emulation
+;show window to start the activity
+InfoWnd(1,$imgNo)
+
+InfoWnd(2)
+
+;sleep for xx sec
+Sleep($interval)
+
+;Survey
+$sQoE = Survey()
+
+;Write results to the File
+FileWrite($hFilehandle,  $x & " 0 0 " & $sQoE & @CRLF)
+
+
 For $i = 0 To UBound($aRTT) - 1
-   For $j = 0 To UBound($aLoss) - 1
+   For $j = 1 To UBound($aLoss) - 1
+
+	  $imgNo = $imgNo + 1
 
 	 ;start clumsy
 	  Clumsy($hClumsy, "configure",$aRTT[$i], $aloss[$j])
@@ -116,7 +132,7 @@ For $i = 0 To UBound($aRTT) - 1
 	  ;stop clumsy
 	  Clumsy($hClumsy, "stop")
 
-	  $imgNo = $imgNo + 1
+
 
    Next
 Next
