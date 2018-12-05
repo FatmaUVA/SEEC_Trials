@@ -25,20 +25,20 @@
 ; ============================ Parameters initialization ====================
 ; QoS
 Local $aRTT[1] = [0]
-Local $aLoss[3] = [0,3,5] ;packet loss rate, unit is %
+Local $aLoss[3] = [0,0.5,10] ;packet loss rate, unit is %
 Local $videoDir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 ;Local $vdieoName = "Fast Five Stealing The Vault Scene.mp4"
 Local $vdieoName= "zootopia-cut-1080p-36-sec.mkv"
 Local $timeInterval = 36000 ;24000 ;in ms
 ;Local $station = $CmdLine[1]
-Local $station = "A33" ;A for protocol A nad B for Protocol B
+Local $station = "A1" ;A for protocol A nad B for Protocol B
 Local $activity = "video"
 Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
 Local $winTitle = "Movies & TV"
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
-Global $sFileName = @ScriptDir &"\" & $station &"-"& $activity &"-QoE-results.txt"
+Global $sFileName = @ScriptDir &"\" & $station &"-"& $activity &"-QoE-results-w2.txt"
 
 ; Open file
 Global $hFilehandle = FileOpen($sFileName, $FO_APPEND)

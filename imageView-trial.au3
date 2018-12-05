@@ -27,7 +27,7 @@ Opt("WinTitleMatchMode",-2) ;1=start, 2=subStr, 3=exact, 4=advanced, -1 to -4=No
 ; ============================ Parameters initialization ====================
 ; QoS
 Local $aRTT[1] = [0]
-Local $aLoss[3] = [0,3,5] ;packet loss rate, unit is %
+Local $aLoss[3] = [0,0.5,10] ;packet loss rate, unit is %
 Local $station = $CmdLine[1]
 ;Local $station = "A33"
 Local $activity = "ImageView"

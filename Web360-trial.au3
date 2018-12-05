@@ -26,12 +26,12 @@ Opt("WinTitleMatchMode",-2) ;1=start, 2=subStr, 3=exact, 4=advanced, -1 to -4=No
 ; ============================ Parameters initialization ====================
 ; QoS
 Local $aRTT[1] = [0]
-Local $aLoss[3] = [0,0.01,10] ;packet loss rate, unit is %
+Local $aLoss[3] = [0,0.5,10] ;packet loss rate, unit is %
 Local $videoDir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 Local $appName  = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
 Local $winTitle = "New Tab - Google Chrome"
-Local $station = "A33"
-;Local $station = $CmdLine[1]
+;Local $station = "A33"
+Local $station = $CmdLine[1]
 Local $activity = "Web360"
 Local $interval = 15000;time interval before each QoE survey
 Global $clumsyDir = "C:\Users\Harlem5\Downloads\"

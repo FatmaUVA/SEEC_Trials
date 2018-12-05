@@ -52,9 +52,11 @@ FileClose($hIndexFile)
 
 ;=========================== Define activities based on station and random number ====================
 If $station == "A1" Then
-   Local $activity [3] = ["video-same-vid-trial.au3", "Insta360-trial.au3", "skype.au3" ]
+   ;Local $activity [3] = ["video-same-vid-trial.au3", "Web360-trial.au3", "skype.au3" ] ;w2 and w3
+   Local $activity [3] = ["video-same-vid-trial.au3", "Web360-trial.au3", "imageView-trial.au3" ]
 ElseIf $station == "A2" Then
-   Local $activity [3] = ["imageView-trial.au3", "Insta360-trial.au3", "video-same-vid-trial.au3" ]
+   ;Local $activity [3] = ["imageView-trial.au3", "Web360-trial.au3", "video-same-vid-trial.au3" ] ;w2 and w3
+   Local $activity [3] = [ "Web360-trial.au3", "video-same-vid-trial.au3", "imageView-trial.au3" ]
 EndIf
 
 #comments-start
