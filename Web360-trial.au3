@@ -40,7 +40,7 @@ Local $imageURL[3] = ["https://bit.ly/2zlV4xZ", "https://bit.ly/2Sf6nim", "https
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
-Global $sFileName = @ScriptDir &"\" & $station &"-"& $activity &"-QoE-results.txt"
+Global $sFileName = @ScriptDir &"\" & $station &"-"& $activity &"-QoE-results-Cha.txt"
 
 ; Open file
 Global $hFilehandle = FileOpen($sFileName, $FO_APPEND)

@@ -45,8 +45,8 @@ Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
-Global $sFileName1 = @ScriptDir &"\" & $station &"-"& $activity  & "-" & $picDirName1 &"-QoE-results.txt"
-Global $sFileName2 = @ScriptDir &"\" & $station &"-"& $activity  & "-" & $picDirName2 &"-QoE-results.txt"
+Global $sFileName1 = @ScriptDir &"\" & $station &"-"& $activity  & "-" & $picDirName1 &"-QoE-results-Cha.txt"
+Global $sFileName2 = @ScriptDir &"\" & $station &"-"& $activity  & "-" & $picDirName2 &"-QoE-results-Cha.txt"
 
 ; Open file
 Global $hFilehandle1 = FileOpen($sFileName1, $FO_APPEND)

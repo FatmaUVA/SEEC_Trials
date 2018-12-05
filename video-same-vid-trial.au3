@@ -38,7 +38,7 @@ Local $winTitle = "Movies & TV"
 
 ;============================= Create a file for results======================
 ; Create file in same folder as script
-Global $sFileName = @ScriptDir &"\" & $station &"-"& $activity &"-QoE-results-w2.txt"
+Global $sFileName = @ScriptDir &"\" & $station &"-"& $activity &"-QoE-results-Cha.txt"
 
 ; Open file
 Global $hFilehandle = FileOpen($sFileName, $FO_APPEND)
