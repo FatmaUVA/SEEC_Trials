@@ -25,13 +25,13 @@
 ; ============================ Parameters initialization ====================
 ; QoS
 Local $aRTT[1] = [0]
-Local $aLoss[3] = [0,0.5,10] ;packet loss rate, unit is %
+Local $aLoss[3] = [0,5,10] ;packet loss rate, unit is %
 Local $videoDir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 ;Local $vdieoName = "Fast Five Stealing The Vault Scene.mp4"
 Local $vdieoName= "zootopia-cut-1080p-36-sec.mkv"
 Local $timeInterval = 36000 ;24000 ;in ms
-;Local $station = $CmdLine[1]
-Local $station = "A1" ;A for protocol A nad B for Protocol B
+Local $station = $CmdLine[1]
+;Local $station = "A33" ;A for protocol A nad B for Protocol B
 Local $activity = "video"
 Global $clumsyDir = "C:\Users\Harlem5\Downloads\"
 Local $winTitle = "Movies & TV"
@@ -114,6 +114,11 @@ For $i = 0 To UBound($aRTT) - 1
 
 	  ;Write results to the File
 	  FileWrite($hFilehandle, $x & " "& $aRTT[$i] & " " & $aLoss[$j] & " " & $sQoE & @CRLF)
+
+	  ;WinActivate($hClumsy)
+
+	  ;stop clumsy
+	  Clumsy($hClumsy, "stop")
 
    Next
 Next
@@ -236,6 +241,9 @@ Func Clumsy($hWnd, $cmd, $RTT=0, $loss=0)
    If $cmd = "open" Then
 	  ShellExecute($clumsyDir & "clumsy-0.2-win64\clumsy.exe")
 	  $hWnd = WinWaitActive("clumsy 0.2")
+
+	  Sleep(500)
+
 	  ;basic setup
 	  ; clear the filter text filed
 	  ;Local $filter = "outbound and ip.DstAddr==" & $clinetIPAddress & " and udp.DstPort != "& $udpPort
