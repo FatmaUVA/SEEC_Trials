@@ -24,7 +24,7 @@
 ;#pragma compile(AutoItExecuteAllowed, true)
 #RequireAdmin
 
-Global $station = "A1"
+Global $station = "A2"
 ;Local $activity1 [3] = ["imageView-trial.au3", "Insta360-trial.au3", "skype.au3" ];["activ.1-video.au3" , "activ.3-Game.au3"];["activ.1-video.au3", "activ.3-Game-jigsaw.au3"];, "A-360player.au3"];[ "activ.3-Game-jigsaw.au3","activ.1-video.au3"]; ,"activ.4-GIMP.au3","activ.3-Game.au3"]
 Local $dir = "C:\Users\Harlem5\Desktop\SEEC_Trials\"
 
@@ -53,10 +53,12 @@ FileClose($hIndexFile)
 ;=========================== Define activities based on station and random number ====================
 If $station == "A1" Then
    ;Local $activity [3] = ["video-same-vid-trial.au3", "Web360-trial.au3", "skype.au3" ] ;w2 and w3
-   Local $activity [3] = ["video-same-vid-trial.au3", "Web360-trial.au3", "imageView-trial.au3" ]
+   ;Local $activity [3] = ["video-same-vid-trial.au3", "Web360-trial.au3", "imageView-trial.au3" ] ; chattanooga
+   Local $activity [1] = ["video-same-vid-trial.au3"]
 ElseIf $station == "A2" Then
    ;Local $activity [3] = ["imageView-trial.au3", "Web360-trial.au3", "video-same-vid-trial.au3" ] ;w2 and w3
-   Local $activity [3] = [ "Web360-trial.au3", "video-same-vid-trial.au3", "imageView-trial.au3" ]
+   ;Local $activity [3] = [ "Web360-trial.au3", "video-same-vid-trial.au3", "imageView-trial.au3" ] ; Chattanooga
+   Local $activity [1] = ["video-same-vid-trial.au3"]
 EndIf
 
 #comments-start
@@ -111,7 +113,7 @@ RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName)
 
 ;pre-survey
 $scriptName = "pre-survey-questions.au3" ;
-RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName &" " & $station)
+;RunWait(@AutoItExe & " /AutoIt3ExecuteScript "& $dir & $scriptName &" " & $station)
 
 
 $count=0
