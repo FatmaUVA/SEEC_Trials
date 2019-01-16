@@ -1,0 +1,8 @@
+Aboyt the results files:
+
+- A1 and A2 indicates the testing stations
+- pilot (original file named uva-1) has the pilot study results of 16 participants
+- w1 has the first week testing (before we decided to do Web360 and a same video test)
+- w2 has the 2nd and 3rd weeks testing results (changed to a same video, and Web360)
+
+** Note in A2 web360: the first 7 runs has 0.01 instead of 0.5 because the Insta script crashes and I quickly changed it to use Wev360 and didn't pay attention to the loss rate.
