@@ -1,0 +1,15 @@
+
+Fatma
+
+March 14, 2019
+
+- I wanted to make sure I had all the data, so I created new folder, went to VM2 and VM3, and moved the data from their to ensure I did not missed any file.
+
+- A1 represents VM2 data, and A2 represents VM3 data
+- uva-1: pilot study with 16 participants, 8 each station
+- w1: first week, A1: 15 participants, A2: 16 participants
+- w2: 2nd and 3rd week trials, A1: 39 participants based on the presurvey, but 2 participants did not finish the pre-survey so total is 37, A2: 33 participants, 1 did not finish the pre-survey so the total is 32
+
+==> Total participants that at least did the pre-survey: 116
+==> We don't have any MOS wiht 116 participants because the order of the application changed based on what application we need more data to.
+
