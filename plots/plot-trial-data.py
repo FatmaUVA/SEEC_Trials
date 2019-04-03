@@ -15,7 +15,8 @@ import sys
 import math
 from scipy import stats
 
-res_dir = "/Users/fatmaalali/Documents/UVA/Scripts/SEEC_Trials/results/"
+res_dir = "/Users/fatmaalali/Documents/UVA/Scripts/SEEC_Trials/New-results/" #results/"
+#res_dir = "/Users/fatmaalali/Documents/UVA/Scripts/SEEC_Trials/results/"
 plot_dir = "/Users/fatmaalali/Documents/UVA/Scripts/SEEC_Trials/plots/UVA-Trial/"
 Apps = ["ImageView-pics2", "Web360" ,"Skype", "same-video"]
 leg = ["2D image viewing", "360-degree images" ,"Skype", "Video"]
@@ -45,32 +46,38 @@ for app in Apps:
         app_mean = app + "_mean"
         app_std = app + "_std"
         app_error = app + "_error"
+        app_all_total_runs = app+"_all_total_runs"
         globals()[app_loss_all] = []
         globals()[app_mean] = []
         globals()[app_std] = []
         globals()[app_error] = []
+        globals()[app_all_total_runs] = []
 
         for l in loss:
             #create array based on app and loss value to hold QoS
             app_loss = app+"_"+str(l)
             globals()[app_loss] = []
             #read rows with specific loss value colunm 2 is loss value
-            print "Testing only globals()[data_app]", globals()[data_app]
             temp = globals()[data_app][np.where(globals()[data_app][:,2] == l)]
             globals()[app_loss] = temp[:,3] #each app loss will have an array
+            print(app,"loss",l,"total runs",len(globals()[app_loss]))
+            #globals()[app_loss_total_runs] = len(globals()[app_loss])
+            globals()[app_all_total_runs].append(len(globals()[app_loss])) # need total runs for each loss value for CI calculation
             globals()[app_loss_all].append(temp[:,3]) #this array has all arrays with defferent loss values
             globals()[app_mean].append(np.mean(temp[:,3]))
             globals()[app_std].append(np.std(temp[:,3]))
 
-            total_runs = len(app_loss) #need total run for error computation
-    
+            #total_runs = len(app_loss) #need total run for error computation #FATMA: TODO, this is wrong!!
+
+        print (app," total runs array,",globals()[app_all_total_runs])
         z=1.96 #for 95% CI
         #find error bar: Standared Error (SE) = std/sqrt(n), upper limit = mean + SE*z
         globals()[app_mean] = np.asarray(globals()[app_mean])
         globals()[app_std] = np.asarray(globals()[app_std])
         globals()[app_error] = np.asarray(globals()[app_error])
+        globals()[app_all_total_runs] = np.asarray(globals()[app_all_total_runs])
         #compute error bar
-        globals()[app_error] = (globals()[app_std]/ math.sqrt(total_runs))
+        globals()[app_error] = (globals()[app_std]/ np.sqrt(globals()[app_all_total_runs]))
         globals()[app_error] = z*globals()[app_error]
         
         print(app_mean," ",globals()[app_mean])
@@ -198,12 +205,13 @@ col_index = 0
 plt.figure()
 N = len(loss) #number of packet loss rate values
 ind = np.arange(N)    # the x locations for the groups
-print("ind ",ind)
 width = 0.17         # the width of the bars
 
 for app in Apps:
     app_mean = app + "_mean"
     app_error = app + "_error"
+#    globals()[app_mean] = [0,0,0,0,0]
+#    globals()[app_error] = [0,0,0,0,0]
     if app == "same-video":
         temp = np.take(globals()[app_mean],(0,1,2))
         temp = np.asarray(temp)
