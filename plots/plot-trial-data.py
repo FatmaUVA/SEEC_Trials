@@ -220,9 +220,15 @@ for app in Apps:
         globals()[app_mean] = temp
         globals()[app_error] = np.take(globals()[app_error],(0,1,2))
         ind = np.take(ind,(0,1,2))
+        #Apps = ["ImageView-pics2", "Web360" ,"Skype", "same-video"]
+#    if app == "Skype": to create gray plots with focus on one app
     plt.bar(ind, globals()[app_mean], width, color=colors[col_index],label=leg[col_index], yerr=globals()[app_error],hatch=bar_fill[col_index])
     plt.plot(ind,globals()[app_mean],color=colors[col_index],linewidth=2,linestyle='--')
     plt.scatter(ind,globals()[app_mean],color='black',marker='o')
+#    else:
+#        plt.bar(ind, globals()[app_mean], width, color="lightgray",label=leg[col_index], yerr=globals()[app_error],hatch=bar_fill[col_index])
+#        plt.plot(ind,globals()[app_mean],color="lightgray",linewidth=2,linestyle='--')
+#        plt.scatter(ind,globals()[app_mean],color="lightgray",marker='o')
     col_index = col_index + 1
     ind = [x + width for x in ind]
 
@@ -231,5 +237,5 @@ plt.ylabel('Mean Opinion Score (MOS)',fontsize=14)
 plt.xlabel('Packet loss rate (%)',fontsize=14)
 plt.legend(loc='upper left', ncol=4, bbox_to_anchor=(-0.15,1.12))
 #change the marker size manually for both lines
-#plt.savefig(plot_dir+'patterned-barplot-with-mean-lines-mean-QoS-vs-loss-'+plot_name+'.png',format="png", bbox_inches='tight')
+#plt.savefig(plot_dir+'patterned-barplot-with-mean-lines-mean-QoS-vs-loss-'+plot_name+'.pdf',format="pdf", bbox_inches='tight')
 plt.show()
